@@ -26,7 +26,7 @@ export const LoginView = ({
             fontSize={16}
             name="email"
             control={control}
-            placeholder="Email"
+            placeholder="Digite seu e-mail"
           />
         </YStack>
 

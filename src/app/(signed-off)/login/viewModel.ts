@@ -19,7 +19,7 @@ export const useLoginViewModel = (service: AuthService) => {
   };
 
   const handleGoToRegister = () => {
-    router.navigate("/(signed-off)/login");
+    router.navigate("/(signed-off)/register");
   };
 
   return { control, onSubmit, isLoading, handleSubmit, handleGoToRegister };

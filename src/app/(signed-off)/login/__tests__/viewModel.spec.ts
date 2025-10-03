@@ -85,7 +85,43 @@ describe("Login - ViewModel", () => {
       result.current.handleGoToRegister();
     });
 
-    expect(navigateMock).toHaveBeenCalledWith("/(signed-off)/login");
+    expect(navigateMock).toHaveBeenCalledWith("/(signed-off)/register");
     expect(navigateMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("should set isLoading to false after successful login", async () => {
+    const { result } = sut();
+
+    jest.spyOn(fakeService, "login").mockResolvedValue({
+      token: "mock-token",
+    });
+
+    expect(result.current.isLoading).toBe(false);
+
+    result.current.onSubmit({
+      email: "mocked@test.com",
+      password: "mockedPassword123",
+    });
+
+    expect(result.current.isLoading).toBe(false);
+  });
+
+  it("should set isLoading to false after login failure", async () => {
+    const { result } = sut();
+
+    jest
+      .spyOn(fakeService, "login")
+      .mockRejectedValue(new Error("Login failed"));
+
+    expect(result.current.isLoading).toBe(false);
+
+    await act(async () => {
+      await result.current.onSubmit({
+        email: "mocked@test.com",
+        password: "wrongPassword",
+      });
+    });
+
+    expect(result.current.isLoading).toBe(false);
   });
 });

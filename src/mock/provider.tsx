@@ -34,7 +34,12 @@ export const createWrapper = () => {
 export const WrapperUi = ({ children }: { children: React.ReactNode }) => {
   const testQueryClient = createTestQueryClient();
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider
+      initialMetrics={{
+        frame: { x: 0, y: 0, width: 0, height: 0 },
+        insets: { top: 0, left: 0, right: 0, bottom: 0 },
+      }}
+    >
       <QueryClientProvider client={testQueryClient}>
         <TamaguiProvider config={config}>{children}</TamaguiProvider>
       </QueryClientProvider>
