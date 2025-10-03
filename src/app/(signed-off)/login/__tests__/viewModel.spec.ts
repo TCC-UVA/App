@@ -1,0 +1,91 @@
+import { createWrapper } from "@/src/mock/provider";
+import { AuthService } from "@/src/services/auth";
+import { renderHook, waitFor } from "@testing-library/react-native";
+import { useRouter } from "expo-router";
+import { act } from "react";
+import { useLoginViewModel } from "../viewModel";
+
+jest.mock("expo-router", () => ({
+  useRouter: jest.fn(),
+}));
+
+const fakeService: AuthService = {
+  login: jest.fn(),
+  register: jest.fn(),
+};
+
+const sut = () =>
+  renderHook(() => useLoginViewModel(fakeService), {
+    wrapper: createWrapper(),
+  });
+
+describe("Login - ViewModel", () => {
+  const navigateMock = jest.fn();
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.resetModules();
+
+    (useRouter as jest.Mock).mockReturnValue({
+      navigate: navigateMock,
+      push: jest.fn(),
+      replace: jest.fn(),
+      back: jest.fn(),
+    });
+  });
+
+  it("should call login mutation with correct credentials when submitted", async () => {
+    const { result } = sut();
+    const loginSpy = jest.spyOn(fakeService, "login").mockResolvedValue({
+      token: "mock-token",
+    });
+
+    const mockedData = {
+      email: "mocked@test.com",
+      password: "mockedPassword123",
+    };
+
+    result.current.onSubmit(mockedData);
+
+    await waitFor(async () => {
+      expect(loginSpy).toHaveBeenCalledWith({
+        email: "mocked@test.com",
+        password: "mockedPassword123",
+      });
+      expect(loginSpy).toHaveBeenCalledTimes(1);
+
+      const response = await loginSpy.mock.results[0].value;
+
+      expect(response).toEqual({
+        token: "mock-token",
+      });
+    });
+  });
+  it("should set isLoading to true while mutation is pending", async () => {
+    const { result } = sut();
+
+    jest
+      .spyOn(fakeService, "login")
+      .mockImplementation(() => new Promise(() => {}));
+
+    expect(result.current.isLoading).toBe(false);
+
+    result.current.onSubmit({
+      email: "mocked@test.com",
+      password: "mockedPassword123",
+    });
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(true);
+    });
+  });
+
+  it("should navigate to register screen when handleGoToRegister is called", () => {
+    const { result } = sut();
+
+    act(() => {
+      result.current.handleGoToRegister();
+    });
+
+    expect(navigateMock).toHaveBeenCalledWith("/(signed-off)/login");
+    expect(navigateMock).toHaveBeenCalledTimes(1);
+  });
+});
