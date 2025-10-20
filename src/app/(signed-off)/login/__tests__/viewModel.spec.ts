@@ -124,4 +124,14 @@ describe("Login - ViewModel", () => {
 
     expect(result.current.isLoading).toBe(false);
   });
+  it("should focus password input when handleFocusPasswordInput is called", () => {
+    const { result } = sut();
+    const setFocusSpy = jest.spyOn(result.current, "handleFocusPasswordInput");
+
+    act(() => {
+      result.current.handleFocusPasswordInput();
+    });
+
+    expect(setFocusSpy).toHaveBeenCalledTimes(1);
+  });
 });

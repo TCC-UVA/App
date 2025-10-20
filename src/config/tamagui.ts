@@ -19,6 +19,8 @@ const config = createTamagui({
   shorthands: {
     px: "paddingHorizontal",
     py: "paddingVertical",
+    pt: "paddingTop",
+    pb: "paddingBottom",
     mx: "marginHorizontal",
     mt: "marginTop",
     mb: "marginBottom",

@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { LoginFormData, loginSchema } from "./model";
 export const useLoginViewModel = (service: AuthService) => {
   const router = useRouter();
-  const { handleSubmit, control } = useForm<LoginFormData>({
+  const { handleSubmit, control, setFocus } = useForm<LoginFormData>({
     mode: "onSubmit",
     resolver: yupResolver(loginSchema),
     defaultValues: { email: "", password: "" },
@@ -22,5 +22,16 @@ export const useLoginViewModel = (service: AuthService) => {
     router.navigate("/(signed-off)/register");
   };
 
-  return { control, onSubmit, isLoading, handleSubmit, handleGoToRegister };
+  const handleFocusPasswordInput = () => {
+    setFocus("password");
+  };
+
+  return {
+    control,
+    onSubmit,
+    isLoading,
+    handleSubmit,
+    handleGoToRegister,
+    handleFocusPasswordInput,
+  };
 };

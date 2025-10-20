@@ -32,6 +32,7 @@ const sut = (customProps?: Partial<ReturnType<typeof useLoginViewModel>>) => {
     handleGoToRegister: mockedHandleGoToRegister,
     isLoading: false,
     onSubmit: mockedOnSubmit,
+    handleFocusPasswordInput: jest.fn(),
     ...customProps,
   } as ReturnType<typeof useLoginViewModel>;
   return render(
@@ -87,9 +88,13 @@ describe("Login - View", () => {
     expect(mockedHandleGoToRegister).toHaveBeenCalledTimes(1);
   });
 
-  it('should show "Loading..." when isLoading is true', () => {
-    const { getByText } = sut({ isLoading: true });
-    expect(getByText("Loading...")).toBeOnTheScreen();
+  it("should show loading state when isLoading is true", () => {
+    const { queryByText, queryByTestId } = sut({ isLoading: true });
+    const loadingIndicator = queryByTestId("login-button-loading");
+
+    expect(loadingIndicator).toBeOnTheScreen();
+
+    expect(queryByText("Login")).not.toBeOnTheScreen();
   });
 
   it("should show validate input error message", async () => {
