@@ -1,0 +1,402 @@
+import { Stock } from "../models/stock";
+
+export const mockStocks: Stock[] = [
+  // Bancos e Financeiro
+  {
+    id: "1",
+    ticker: "ITUB4",
+    name: "Itaú Unibanco PN",
+    price: 28.45,
+    variation: 1.24,
+    sector: "Financeiro",
+    type: "ACAO",
+    volume: 45000000,
+    marketCap: 278000000000,
+    dividendYield: 4.2,
+  },
+  {
+    id: "2",
+    ticker: "BBDC4",
+    name: "Bradesco PN",
+    price: 14.32,
+    variation: -0.56,
+    sector: "Financeiro",
+    type: "ACAO",
+    volume: 38000000,
+    marketCap: 142000000000,
+    dividendYield: 5.8,
+  },
+  {
+    id: "3",
+    ticker: "BBAS3",
+    name: "Banco do Brasil ON",
+    price: 25.78,
+    variation: 0.89,
+    sector: "Financeiro",
+    type: "ACAO",
+    volume: 22000000,
+    marketCap: 89000000000,
+    dividendYield: 6.3,
+  },
+  {
+    id: "4",
+    ticker: "SANB11",
+    name: "Santander Brasil UNT",
+    price: 26.15,
+    variation: 1.45,
+    sector: "Financeiro",
+    type: "ACAO",
+    volume: 15000000,
+    marketCap: 98000000000,
+    dividendYield: 4.9,
+  },
+
+  // Petróleo e Energia
+  {
+    id: "5",
+    ticker: "PETR4",
+    name: "Petrobras PN",
+    price: 38.92,
+    variation: 2.15,
+    sector: "Petróleo e Gás",
+    type: "ACAO",
+    volume: 82000000,
+    marketCap: 506000000000,
+    dividendYield: 12.5,
+  },
+  {
+    id: "6",
+    ticker: "PETR3",
+    name: "Petrobras ON",
+    price: 41.23,
+    variation: 2.08,
+    sector: "Petróleo e Gás",
+    type: "ACAO",
+    volume: 35000000,
+    marketCap: 536000000000,
+    dividendYield: 11.8,
+  },
+  {
+    id: "7",
+    ticker: "ELET3",
+    name: "Eletrobras ON",
+    price: 42.56,
+    variation: -1.23,
+    sector: "Energia Elétrica",
+    type: "ACAO",
+    volume: 18000000,
+    marketCap: 62000000000,
+    dividendYield: 3.2,
+  },
+  {
+    id: "8",
+    ticker: "ELET6",
+    name: "Eletrobras PNB",
+    price: 45.78,
+    variation: -0.98,
+    sector: "Energia Elétrica",
+    type: "ACAO",
+    volume: 12000000,
+    marketCap: 66000000000,
+    dividendYield: 3.5,
+  },
+
+  // Varejo
+  {
+    id: "9",
+    ticker: "MGLU3",
+    name: "Magazine Luiza ON",
+    price: 8.34,
+    variation: -2.45,
+    sector: "Varejo",
+    type: "ACAO",
+    volume: 42000000,
+    marketCap: 28000000000,
+    dividendYield: 0.0,
+  },
+  {
+    id: "10",
+    ticker: "LREN3",
+    name: "Lojas Renner ON",
+    price: 15.67,
+    variation: 0.32,
+    sector: "Varejo",
+    type: "ACAO",
+    volume: 19000000,
+    marketCap: 14800000000,
+    dividendYield: 2.1,
+  },
+  {
+    id: "11",
+    ticker: "AMER3",
+    name: "Americanas ON",
+    price: 2.14,
+    variation: -5.28,
+    sector: "Varejo",
+    type: "ACAO",
+    volume: 95000000,
+    marketCap: 2500000000,
+    dividendYield: 0.0,
+  },
+
+  // Mineração e Siderurgia
+  {
+    id: "12",
+    ticker: "VALE3",
+    name: "Vale ON",
+    price: 62.34,
+    variation: 1.87,
+    sector: "Mineração",
+    type: "ACAO",
+    volume: 58000000,
+    marketCap: 285000000000,
+    dividendYield: 9.8,
+  },
+  {
+    id: "13",
+    ticker: "CSNA3",
+    name: "CSN ON",
+    price: 12.89,
+    variation: -1.15,
+    sector: "Siderurgia",
+    type: "ACAO",
+    volume: 14000000,
+    marketCap: 17500000000,
+    dividendYield: 4.5,
+  },
+  {
+    id: "14",
+    ticker: "USIM5",
+    name: "Usiminas PNA",
+    price: 6.78,
+    variation: -0.73,
+    sector: "Siderurgia",
+    type: "ACAO",
+    volume: 8000000,
+    marketCap: 4900000000,
+    dividendYield: 3.2,
+  },
+
+  // Tecnologia
+  {
+    id: "15",
+    ticker: "TOTS3",
+    name: "TOTVS ON",
+    price: 28.92,
+    variation: 2.34,
+    sector: "Tecnologia",
+    type: "ACAO",
+    volume: 5000000,
+    marketCap: 16800000000,
+    dividendYield: 1.8,
+  },
+  {
+    id: "16",
+    ticker: "LWSA3",
+    name: "Locaweb ON",
+    price: 4.56,
+    variation: -1.51,
+    sector: "Tecnologia",
+    type: "ACAO",
+    volume: 12000000,
+    marketCap: 2700000000,
+    dividendYield: 0.0,
+  },
+
+  // Telecomunicações
+  {
+    id: "17",
+    ticker: "VIVT3",
+    name: "Telefônica Brasil ON",
+    price: 48.23,
+    variation: 0.45,
+    sector: "Telecomunicações",
+    type: "ACAO",
+    volume: 8000000,
+    marketCap: 81000000000,
+    dividendYield: 5.6,
+  },
+  {
+    id: "18",
+    ticker: "TIMS3",
+    name: "TIM ON",
+    price: 16.89,
+    variation: 1.12,
+    sector: "Telecomunicações",
+    type: "ACAO",
+    volume: 14000000,
+    marketCap: 36500000000,
+    dividendYield: 7.2,
+  },
+
+  // Alimentos e Bebidas
+  {
+    id: "19",
+    ticker: "ABEV3",
+    name: "Ambev ON",
+    price: 11.45,
+    variation: 0.67,
+    sector: "Alimentos e Bebidas",
+    type: "ACAO",
+    volume: 32000000,
+    marketCap: 180000000000,
+    dividendYield: 4.8,
+  },
+  {
+    id: "20",
+    ticker: "JBSS3",
+    name: "JBS ON",
+    price: 32.78,
+    variation: 1.89,
+    sector: "Alimentos e Bebidas",
+    type: "ACAO",
+    volume: 18000000,
+    marketCap: 71000000000,
+    dividendYield: 3.5,
+  },
+  {
+    id: "21",
+    ticker: "BRFS3",
+    name: "BRF ON",
+    price: 18.23,
+    variation: -0.45,
+    sector: "Alimentos e Bebidas",
+    type: "ACAO",
+    volume: 9000000,
+    marketCap: 14800000000,
+    dividendYield: 2.1,
+  },
+
+  // Saúde
+  {
+    id: "22",
+    ticker: "RDOR3",
+    name: "Rede D'Or ON",
+    price: 24.56,
+    variation: 0.98,
+    sector: "Saúde",
+    type: "ACAO",
+    volume: 11000000,
+    marketCap: 51000000000,
+    dividendYield: 1.2,
+  },
+  {
+    id: "23",
+    ticker: "HAPV3",
+    name: "Hapvida ON",
+    price: 3.89,
+    variation: -1.27,
+    sector: "Saúde",
+    type: "ACAO",
+    volume: 25000000,
+    marketCap: 13200000000,
+    dividendYield: 0.0,
+  },
+
+  // Construção Civil
+  {
+    id: "24",
+    ticker: "CYRE3",
+    name: "Cyrela Realty ON",
+    price: 21.34,
+    variation: 1.56,
+    sector: "Construção Civil",
+    type: "ACAO",
+    volume: 7000000,
+    marketCap: 8000000000,
+    dividendYield: 5.8,
+  },
+  {
+    id: "25",
+    ticker: "MRFG3",
+    name: "Marfrig ON",
+    price: 7.89,
+    variation: 0.38,
+    sector: "Alimentos e Bebidas",
+    type: "ACAO",
+    volume: 13000000,
+    marketCap: 6500000000,
+    dividendYield: 4.2,
+  },
+
+  // Fundos Imobiliários (FIIs)
+  {
+    id: "26",
+    ticker: "HGLG11",
+    name: "CSHG Logística FII",
+    price: 162.45,
+    variation: 0.23,
+    sector: "Fundos Imobiliários",
+    type: "FII",
+    volume: 2500000,
+    dividendYield: 8.9,
+  },
+  {
+    id: "27",
+    ticker: "KNRI11",
+    name: "Kinea Renda Imobiliária FII",
+    price: 128.9,
+    variation: -0.15,
+    sector: "Fundos Imobiliários",
+    type: "FII",
+    volume: 3200000,
+    dividendYield: 9.2,
+  },
+  {
+    id: "28",
+    ticker: "MXRF11",
+    name: "Maxi Renda FII",
+    price: 10.23,
+    variation: 0.49,
+    sector: "Fundos Imobiliários",
+    type: "FII",
+    volume: 18000000,
+    dividendYield: 10.5,
+  },
+
+  // ETFs
+  {
+    id: "29",
+    ticker: "BOVA11",
+    name: "iShares Ibovespa ETF",
+    price: 118.34,
+    variation: 1.12,
+    sector: "ETF",
+    type: "ETF",
+    volume: 8500000,
+  },
+  {
+    id: "30",
+    ticker: "SMAL11",
+    name: "iShares Small Cap ETF",
+    price: 24.56,
+    variation: -0.67,
+    sector: "ETF",
+    type: "ETF",
+    volume: 1200000,
+  },
+];
+
+export const mockFilteredStocks = (query: string): Stock[] => {
+  if (!query) return mockStocks;
+
+  const lowerQuery = query.toLowerCase();
+  return mockStocks.filter(
+    (stock) =>
+      stock.ticker.toLowerCase().includes(lowerQuery) ||
+      stock.name.toLowerCase().includes(lowerQuery) ||
+      stock.sector.toLowerCase().includes(lowerQuery)
+  );
+};
+
+export const mockStocksByIds = (ids: string[]): Stock[] => {
+  return mockStocks.filter((stock) => ids.includes(stock.id));
+};
+
+export const mockStocksBySector = (sector: string): Stock[] => {
+  return mockStocks.filter((stock) => stock.sector === sector);
+};
+
+export const mockStocksByType = (type: Stock["type"]): Stock[] => {
+  return mockStocks.filter((stock) => stock.type === type);
+};

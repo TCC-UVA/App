@@ -22,26 +22,24 @@ export const ControlledInput = <T extends FieldValues>({
 }: Props<T>) => {
   const theme = useTheme();
   const [isFocused, setIsFocused] = useState(false);
-  const borderColor = useSharedValue(0);
   const scale = useSharedValue(1);
 
   const animatedBorderStyle = useAnimatedStyle(() => ({
-    borderColor: borderColor.value
-      ? String(theme.blue10?.val || "#3b82f6")
-      : String(theme.gray8?.val || "#e5e5e5"),
-    borderWidth: borderColor.value ? 2 : 1,
+    borderRadius: 8,
+    borderColor: isFocused
+      ? String(theme.blue8?.val)
+      : String(theme.gray6?.val),
+    borderWidth: 1,
     transform: [{ scale: scale.value }],
   }));
 
   const handleFocus = () => {
     setIsFocused(true);
-    borderColor.value = withSpring(1);
     scale.value = withSpring(1.01);
   };
 
   const handleBlur = () => {
     setIsFocused(false);
-    borderColor.value = withSpring(0);
     scale.value = withSpring(1);
   };
 
@@ -53,21 +51,15 @@ export const ControlledInput = <T extends FieldValues>({
         return (
           <YStack gap="$2">
             <Animated.View style={[animatedBorderStyle]}>
-              <XStack
-                alignItems="center"
-                bg="$background"
-                borderRadius="$4"
-                px="$3"
-                py="$2"
-              >
+              <XStack alignItems="center" px="$3" py="$2">
                 {icon && (
                   <Ionicons
                     name={icon}
                     size={20}
                     color={
                       isFocused
-                        ? String(theme.blue10?.val || "#3b82f6")
-                        : String(theme.gray10?.val || "#6b7280")
+                        ? String(theme.blue8?.val)
+                        : String(theme.gray10?.val)
                     }
                     style={{ marginRight: 8 }}
                   />
@@ -79,6 +71,11 @@ export const ControlledInput = <T extends FieldValues>({
                   onBlur={handleBlur}
                   flex={1}
                   borderWidth={0}
+                  placeholderTextColor={
+                    isFocused
+                      ? String(theme.blue8?.val)
+                      : String(theme.gray10?.val)
+                  }
                   fontSize={16}
                   bg="transparent"
                   {...rest}

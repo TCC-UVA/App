@@ -13,6 +13,7 @@ const config = createTamagui({
   themes,
   tokens,
   fonts: {},
+
   settings: {
     onlyAllowShorthands: true,
   },

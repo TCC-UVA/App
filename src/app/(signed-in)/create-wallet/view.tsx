@@ -1,4 +1,5 @@
 import { ControlledInput } from "@/src/components/controlled-Input";
+import { Layout } from "@/src/components/layout";
 import { Ionicons } from "@expo/vector-icons";
 import {
   ActivityIndicator,
@@ -7,24 +8,22 @@ import {
   ScrollView,
 } from "react-native";
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button, H5, Paragraph, YStack, useTheme } from "tamagui";
-import { useRegisterViewModel } from "./viewModel";
+import { useCreateWalletViewModel } from "./viewModel";
 
 const AnimatedButton = Animated.createAnimatedComponent(Button);
 
-export const RegisterView = ({
+export const CreateWalletView = ({
   control,
   onSubmit,
   isLoading,
   handleSubmit,
-  handleGoToLogin,
-}: ReturnType<typeof useRegisterViewModel>) => {
-  const { bottom, top } = useSafeAreaInsets();
+  handleGoBack,
+}: ReturnType<typeof useCreateWalletViewModel>) => {
   const theme = useTheme();
 
   return (
-    <YStack flex={1} pt={top + 20} pb={bottom + 20} px="$4">
+    <Layout>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -38,7 +37,7 @@ export const RegisterView = ({
           keyboardShouldPersistTaps="handled"
         >
           <Animated.View entering={FadeInDown.duration(600).springify()}>
-            <YStack alignItems="center" mb="$6" mt="$4">
+            <YStack alignItems="center" mb="$8" mt="$4">
               <Animated.View>
                 <YStack
                   bg="$blue10"
@@ -50,17 +49,17 @@ export const RegisterView = ({
                   mb="$4"
                 >
                   <Ionicons
-                    name="person-add-outline"
+                    name="briefcase-outline"
                     size={40}
                     color={String(theme.background?.val || "#ffffff")}
                   />
                 </YStack>
               </Animated.View>
               <H5 color="$color" textAlign="center" fontWeight="700" mb="$2">
-                Criar Conta
+                Nova Carteira
               </H5>
               <Paragraph color="$gray11" textAlign="center">
-                Comece a gerenciar suas finanças hoje
+                Crie uma carteira para organizar seus investimentos
               </Paragraph>
             </YStack>
           </Animated.View>
@@ -71,14 +70,15 @@ export const RegisterView = ({
             >
               <YStack gap="$2">
                 <Paragraph fontSize={14} color="$gray11" fontWeight="600">
-                  Nome
+                  Nome da Carteira
                 </Paragraph>
                 <ControlledInput
                   name="name"
                   control={control}
-                  placeholder="Digite seu nome completo"
+                  placeholder="Ex: Minhas Ações, Dividendos, etc."
                   autoCapitalize="words"
-                  icon="person-outline"
+                  icon="briefcase-outline"
+                  autoFocus
                 />
               </YStack>
             </Animated.View>
@@ -88,49 +88,16 @@ export const RegisterView = ({
             >
               <YStack gap="$2">
                 <Paragraph fontSize={14} color="$gray11" fontWeight="600">
-                  E-mail
+                  Descrição (opcional)
                 </Paragraph>
                 <ControlledInput
-                  name="email"
+                  name="description"
                   control={control}
-                  placeholder="Digite seu e-mail"
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  icon="mail-outline"
-                />
-              </YStack>
-            </Animated.View>
-
-            <Animated.View
-              entering={FadeInUp.delay(400).duration(600).springify()}
-            >
-              <YStack gap="$2">
-                <Paragraph fontSize={14} color="$gray11" fontWeight="600">
-                  Senha
-                </Paragraph>
-                <ControlledInput
-                  name="password"
-                  control={control}
-                  secureTextEntry
-                  placeholder="Digite sua senha"
-                  icon="lock-closed-outline"
-                />
-              </YStack>
-            </Animated.View>
-
-            <Animated.View
-              entering={FadeInUp.delay(500).duration(600).springify()}
-            >
-              <YStack gap="$2">
-                <Paragraph fontSize={14} color="$gray11" fontWeight="600">
-                  Confirmar Senha
-                </Paragraph>
-                <ControlledInput
-                  name="confirmPassword"
-                  control={control}
-                  secureTextEntry
-                  placeholder="Confirme sua senha"
-                  icon="lock-closed-outline"
+                  placeholder="Descreva o objetivo desta carteira"
+                  autoCapitalize="sentences"
+                  icon="document-text-outline"
+                  multiline
+                  numberOfLines={4}
                 />
               </YStack>
             </Animated.View>
@@ -139,7 +106,7 @@ export const RegisterView = ({
 
         <YStack gap="$3" mt="$4">
           <Animated.View
-            entering={FadeInUp.delay(600).duration(600).springify()}
+            entering={FadeInUp.delay(400).duration(600).springify()}
           >
             <AnimatedButton
               bg="$blue10"
@@ -154,17 +121,17 @@ export const RegisterView = ({
             >
               {isLoading ? (
                 <ActivityIndicator
-                  testID="register-button-loading"
+                  testID="create-wallet-loading"
                   color="white"
                 />
               ) : (
-                "Criar Conta"
+                "Continuar"
               )}
             </AnimatedButton>
           </Animated.View>
 
           <Animated.View
-            entering={FadeInUp.delay(700).duration(600).springify()}
+            entering={FadeInUp.delay(500).duration(600).springify()}
           >
             <Button
               variant="outlined"
@@ -174,14 +141,15 @@ export const RegisterView = ({
               borderRadius="$4"
               fontWeight="600"
               fontSize={16}
-              onPress={handleGoToLogin}
+              onPress={handleGoBack}
               bg="transparent"
+              disabled={isLoading}
             >
-              Já tem conta? Faça Login
+              Cancelar
             </Button>
           </Animated.View>
         </YStack>
       </KeyboardAvoidingView>
-    </YStack>
+    </Layout>
   );
 };

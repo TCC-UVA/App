@@ -21,6 +21,9 @@ export const useLoginViewModel = (service: AuthService) => {
   const handleGoToRegister = () => {
     router.navigate("/(signed-off)/register");
   };
+  const handleGoToHome = () => {
+    router.navigate("/(signed-in)/home");
+  };
 
   const handleFocusPasswordInput = () => {
     setFocus("password");
@@ -33,5 +36,6 @@ export const useLoginViewModel = (service: AuthService) => {
     handleSubmit,
     handleGoToRegister,
     handleFocusPasswordInput,
+    handleGoToHome,
   };
 };
