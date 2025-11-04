@@ -1,3 +1,9 @@
+if (__DEV__) {
+  import("../../reactotron.config").then(() =>
+    console.log("Reactotron Configured")
+  );
+}
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Slot } from "expo-router";
 import { StatusBar } from "expo-status-bar";
