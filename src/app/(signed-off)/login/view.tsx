@@ -4,7 +4,7 @@ import { Link } from "expo-router";
 import { ActivityIndicator } from "react-native";
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Button, H5, Paragraph, YStack, useTheme } from "tamagui";
+import { Button, H5, Paragraph, View, YStack, useTheme } from "tamagui";
 import { useLoginViewModel } from "./viewModel";
 
 const AnimatedButton = Animated.createAnimatedComponent(Button);
@@ -15,7 +15,7 @@ export const LoginView = ({
   isLoading,
   handleSubmit,
   handleGoToRegister,
-  handleGoToHome,
+  isError,
 }: ReturnType<typeof useLoginViewModel>) => {
   const { bottom, top } = useSafeAreaInsets();
   const theme = useTheme();
@@ -82,6 +82,20 @@ export const LoginView = ({
           </YStack>
         </Animated.View>
 
+        {isError && (
+          <View>
+            <Paragraph
+              fontSize={14}
+              color="$red10"
+              fontWeight="600"
+              textAlign="center"
+            >
+              Ocorreu um erro ao tentar fazer login. Verifique suas credenciais
+              e tente novamente.
+            </Paragraph>
+          </View>
+        )}
+
         <Animated.View entering={FadeInUp.delay(600).duration(600).springify()}>
           <AnimatedButton
             bg="$blue10"
@@ -118,24 +132,6 @@ export const LoginView = ({
               Não tem uma conta? Cadastre-se
             </Button>
           </Link>
-        </Animated.View>
-
-        <Animated.View
-          entering={FadeInUp.delay(1000).duration(600).springify()}
-        >
-          <Button
-            variant="outlined"
-            borderColor="$gray8"
-            color="$blue10"
-            size="$5"
-            borderRadius="$4"
-            fontWeight="600"
-            fontSize={16}
-            onPress={handleGoToHome}
-            bg="transparent"
-          >
-            Ir para home
-          </Button>
         </Animated.View>
       </YStack>
     </YStack>

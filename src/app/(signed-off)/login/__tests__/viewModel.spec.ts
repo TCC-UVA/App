@@ -21,6 +21,7 @@ const sut = () =>
 
 describe("Login - ViewModel", () => {
   const navigateMock = jest.fn();
+  const replaceMock = jest.fn();
   beforeEach(() => {
     jest.clearAllMocks();
     jest.resetModules();
@@ -28,7 +29,7 @@ describe("Login - ViewModel", () => {
     (useRouter as jest.Mock).mockReturnValue({
       navigate: navigateMock,
       push: jest.fn(),
-      replace: jest.fn(),
+      replace: replaceMock,
       back: jest.fn(),
     });
   });
@@ -116,13 +117,16 @@ describe("Login - ViewModel", () => {
     expect(result.current.isLoading).toBe(false);
 
     await act(async () => {
-      await result.current.onSubmit({
+      result.current.onSubmit({
         email: "mocked@test.com",
         password: "wrongPassword",
       });
     });
 
-    expect(result.current.isLoading).toBe(false);
+    await waitFor(async () => {
+      expect(result.current.isLoading).toBe(false);
+      expect(result.current.isError).toBe(true);
+    });
   });
   it("should focus password input when handleFocusPasswordInput is called", () => {
     const { result } = sut();
@@ -133,5 +137,24 @@ describe("Login - ViewModel", () => {
     });
 
     expect(setFocusSpy).toHaveBeenCalledTimes(1);
+  });
+  it("should navigate to home screen after successful login", async () => {
+    const { result } = sut();
+
+    jest.spyOn(fakeService, "login").mockResolvedValue({
+      token: "mock-token",
+    });
+
+    act(() => {
+      result.current.onSubmit({
+        email: "mocked@test.com",
+        password: "mockedPassword123",
+      });
+    });
+
+    await waitFor(() => {
+      expect(replaceMock).toHaveBeenCalledWith("/(signed-in)/(tabs)/home");
+      expect(replaceMock).toHaveBeenCalledTimes(1);
+    });
   });
 });

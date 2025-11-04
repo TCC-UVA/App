@@ -12,17 +12,22 @@ export const useLoginViewModel = (service: AuthService) => {
     defaultValues: { email: "", password: "" },
   });
 
-  const { mutate: onLogin, isPending: isLoading } = useLoginMutation(service);
+  const {
+    mutate: onLogin,
+    isPending: isLoading,
+    isError,
+  } = useLoginMutation(service);
 
   const onSubmit = (data: LoginFormData) => {
-    onLogin(data);
+    onLogin(data, {
+      onSuccess: () => {
+        router.replace("/(signed-in)/(tabs)/home");
+      },
+    });
   };
 
   const handleGoToRegister = () => {
     router.navigate("/(signed-off)/register");
-  };
-  const handleGoToHome = () => {
-    router.navigate("/(signed-in)/home");
   };
 
   const handleFocusPasswordInput = () => {
@@ -36,6 +41,6 @@ export const useLoginViewModel = (service: AuthService) => {
     handleSubmit,
     handleGoToRegister,
     handleFocusPasswordInput,
-    handleGoToHome,
+    isError,
   };
 };

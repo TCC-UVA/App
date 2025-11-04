@@ -13,7 +13,21 @@ import { useLoginViewModel } from "../viewModel";
 
 jest.mock("expo-router", () => ({
   useRouter: jest.fn(),
+  Link: ({ children }: any) => children,
 }));
+
+jest.mock("react-native-reanimated", () => {
+  const Reanimated = require("react-native-reanimated/mock");
+  Reanimated.default.call = () => {};
+  return Reanimated;
+});
+
+jest.mock("@expo/vector-icons", () => {
+  const { View } = require("react-native");
+  return {
+    Ionicons: View,
+  };
+});
 
 const mockedHandleSubmit = jest.fn().mockImplementation((fn) => fn);
 const mockedHandleGoToRegister = jest.fn();
@@ -33,6 +47,7 @@ const sut = (customProps?: Partial<ReturnType<typeof useLoginViewModel>>) => {
     isLoading: false,
     onSubmit: mockedOnSubmit,
     handleFocusPasswordInput: jest.fn(),
+    isError: false,
     ...customProps,
   } as ReturnType<typeof useLoginViewModel>;
   return render(
@@ -53,8 +68,8 @@ describe("Login - View", () => {
 
     const emailInput = getByPlaceholderText("Digite seu e-mail");
     const passwordInput = getByPlaceholderText("Digite sua senha");
-    const loginButton = getByText("Login");
-    const registerButton = getByText("Ir para Registro");
+    const loginButton = getByText("Entrar");
+    const registerButton = getByText("Não tem uma conta? Cadastre-se");
 
     expect(emailInput).toBeOnTheScreen();
     expect(passwordInput).toBeOnTheScreen();
@@ -65,7 +80,7 @@ describe("Login - View", () => {
   it("Should call handleSubmit when login button is pressed", () => {
     const { getByText } = sut();
 
-    const loginButton = getByText("Login");
+    const loginButton = getByText("Entrar");
 
     expect(loginButton).toBeOnTheScreen();
 
@@ -75,17 +90,19 @@ describe("Login - View", () => {
     expect(mockedHandleSubmit).toHaveBeenCalledTimes(1);
   });
 
-  it('should call handleGoToRegister when "Ir para Registro" button is pressed', () => {
+  it('should call handleGoToRegister when "Não tem uma conta? Cadastre-se" button is pressed', () => {
     const { getByText } = sut();
 
-    const registerButton = getByText("Ir para Registro");
+    const registerButton = getByText("Não tem uma conta? Cadastre-se");
 
     expect(registerButton).toBeOnTheScreen();
 
-    fireEvent.press(registerButton);
+    act(() => {
+      fireEvent.press(registerButton);
 
-    expect(mockedHandleGoToRegister).toHaveBeenCalled();
-    expect(mockedHandleGoToRegister).toHaveBeenCalledTimes(1);
+      expect(mockedHandleGoToRegister).toHaveBeenCalled();
+      expect(mockedHandleGoToRegister).toHaveBeenCalledTimes(1);
+    });
   });
 
   it("should show loading state when isLoading is true", () => {
@@ -94,7 +111,7 @@ describe("Login - View", () => {
 
     expect(loadingIndicator).toBeOnTheScreen();
 
-    expect(queryByText("Login")).not.toBeOnTheScreen();
+    expect(queryByText("Entrar")).not.toBeOnTheScreen();
   });
 
   it("should show validate input error message", async () => {
@@ -156,7 +173,7 @@ describe("Login - View", () => {
 
     const emailInput = getByPlaceholderText("Digite seu e-mail");
     const passwordInput = getByPlaceholderText("Digite sua senha");
-    const loginButton = getByText("Login");
+    const loginButton = getByText("Entrar");
 
     fireEvent.changeText(emailInput, "teste@teste.com");
     fireEvent.changeText(passwordInput, "123456");
@@ -179,7 +196,7 @@ describe("Login - View", () => {
 
     const emailInput = getByPlaceholderText("Digite seu e-mail");
     const passwordInput = getByPlaceholderText("Digite sua senha");
-    const loginButton = getByText("Login");
+    const loginButton = getByText("Entrar");
 
     fireEvent.changeText(emailInput, "invalid-email");
     fireEvent.changeText(passwordInput, "123");
