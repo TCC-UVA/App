@@ -169,7 +169,7 @@ export const RegisterView = ({
                     placeholder="DD/MM/AAAA"
                     keyboardType="numeric"
                     icon="calendar-outline"
-                    mask={Mask.date}
+                    onMask={Mask.date}
                     maxLength={10}
                   />
                 </YStack>
