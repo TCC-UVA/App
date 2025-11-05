@@ -18,5 +18,10 @@ export const useOnboardingViewModel = () => {
     router.replace("/(signed-off)/register");
   };
 
-  return { step, handleNextStep, handleGoToSignIn, handleGoToSignUp };
+  return {
+    step,
+    handleNextStep,
+    handleGoToSignIn,
+    handleGoToSignUp,
+  };
 };
