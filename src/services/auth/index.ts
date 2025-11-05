@@ -11,15 +11,20 @@ export interface AuthService {
 
 export class AuthServiceHttp implements AuthService {
   async login(params: LoginRequestDto): Promise<LoginResponseDto> {
-    const response = await api.post<LoginResponseDto>("/auth/login", params);
+    const response = await api.post<LoginResponseDto>("/login_user", {
+      Email: params.email,
+      Password: params.password,
+    });
     return response.data;
   }
 
   async register(params: RegisterRequestDto): Promise<RegisterResponseDto> {
-    const response = await api.post<RegisterResponseDto>(
-      "/auth/register",
-      params
-    );
+    const response = await api.post<RegisterResponseDto>("/create_user", {
+      Name: params.name,
+      Email: params.email,
+      Password: params.password,
+      BirthDate: params.birthDate,
+    });
     return response.data;
   }
 }
