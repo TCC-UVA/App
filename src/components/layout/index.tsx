@@ -1,11 +1,11 @@
 import { PropsWithChildren } from "react";
-import { YStack } from "tamagui";
+import { YStack, YStackProps } from "tamagui";
 
-type Props = PropsWithChildren & {};
+type Props = PropsWithChildren & YStackProps & {};
 
-export const Layout = ({ children }: Props) => {
+export const Layout = ({ children, ...rest }: Props) => {
   return (
-    <YStack flex={1} p={"$4"} bg={"$background"}>
+    <YStack flex={1} p={"$4"} bg={"$background"} {...rest}>
       {children}
     </YStack>
   );

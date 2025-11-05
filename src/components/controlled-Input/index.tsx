@@ -12,12 +12,14 @@ type Props<T extends FieldValues> = InputProps & {
   name: Path<T>;
   control: Control<T>;
   icon?: keyof typeof Ionicons.glyphMap;
+  onMask?: (value: string, previousValue?: string) => string;
 };
 
 export const ControlledInput = <T extends FieldValues>({
   control,
   name,
   icon,
+  onMask,
   ...rest
 }: Props<T>) => {
   const theme = useTheme();
@@ -66,7 +68,10 @@ export const ControlledInput = <T extends FieldValues>({
                 )}
                 <Input
                   {...field}
-                  onChangeText={field.onChange}
+                  onChangeText={(text) => {
+                    const value = onMask ? onMask(text, field.value) : text;
+                    field.onChange(value);
+                  }}
                   onFocus={handleFocus}
                   onBlur={handleBlur}
                   flex={1}

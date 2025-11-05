@@ -5,7 +5,10 @@ const tokens = createTokens({
   size,
   space,
   zIndex,
-  color,
+  color: {
+    ...color,
+    white: "#FFFFFF",
+  },
   radius,
 });
 
