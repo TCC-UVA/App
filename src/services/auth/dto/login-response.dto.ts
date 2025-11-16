@@ -1,3 +1,5 @@
 export interface LoginResponseDto {
-  token: string;
+  access_token: string;
+  username: string;
+  email: string;
 }

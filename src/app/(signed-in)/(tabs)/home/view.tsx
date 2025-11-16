@@ -1,17 +1,8 @@
-import { images } from "@/src/assets";
+import { Header } from "@/src/components/header";
 import { Layout } from "@/src/components/layout";
 import { Ionicons } from "@expo/vector-icons";
 import { FlatList } from "react-native";
-import Animated, { FadeInDown } from "react-native-reanimated";
-import {
-  Button,
-  Image,
-  Input,
-  Paragraph,
-  XStack,
-  YStack,
-  useTheme,
-} from "tamagui";
+import { Button, Input, Paragraph, XStack, YStack, useTheme } from "tamagui";
 import { EmptyState } from "./components/empty";
 import { WalletCard, WalletCardSkeleton } from "./components/wallet-card";
 import { useHomeViewModel } from "./viewModel";
@@ -28,21 +19,17 @@ export const HomeView = ({
 
   return (
     <Layout>
-      <YStack mb="$4">
-        <Animated.View entering={FadeInDown.duration(600).springify()}>
-          <XStack alignItems="center" justifyContent="space-between" mb="$2">
-            <Image source={images.logo} w={160} objectFit="contain" />
-            <Button
-              fontSize={"$3.5"}
-              bg={"$blue10"}
-              color={"white"}
-              onPress={handleGoToCreateWallet}
-            >
-              Nova carteira
-            </Button>
-          </XStack>
-        </Animated.View>
-      </YStack>
+      <Header>
+        <Button
+          fontSize={"$3.5"}
+          bg={"$blue10"}
+          color={"white"}
+          onPress={handleGoToCreateWallet}
+        >
+          Nova carteira
+        </Button>
+      </Header>
+
       <YStack px={"$3.5"} gap={"$2"}>
         <XStack alignItems="center">
           <Paragraph fontSize={18} color="$gray11">

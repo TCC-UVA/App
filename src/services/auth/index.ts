@@ -11,15 +11,19 @@ export interface AuthService {
 
 export class AuthServiceHttp implements AuthService {
   async login(params: LoginRequestDto): Promise<LoginResponseDto> {
-    const response = await api.post<LoginResponseDto>("/login_user", {
-      Email: params.email,
-      Password: params.password,
+    const data = {
+      username: params.email,
+      password: params.password,
+      grant_type: "password",
+    };
+    const response = await api.post<LoginResponseDto>("/token", data, {
+      headers: { "content-type": "application/x-www-form-urlencoded" },
     });
     return response.data;
   }
 
   async register(params: RegisterRequestDto): Promise<RegisterResponseDto> {
-    const response = await api.post<RegisterResponseDto>("/create_user", {
+    const response = await api.post<RegisterResponseDto>("/user", {
       Name: params.name,
       Email: params.email,
       Password: params.password,

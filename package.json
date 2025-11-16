@@ -16,6 +16,7 @@
     "@expo/metro-runtime": "~6.1.2",
     "@expo/vector-icons": "^15.0.2",
     "@hookform/resolvers": "^5.2.2",
+    "@react-native-async-storage/async-storage": "2.2.0",
     "@react-navigation/bottom-tabs": "^7.4.0",
     "@react-navigation/elements": "^2.6.3",
     "@react-navigation/native": "^7.1.8",
@@ -39,7 +40,6 @@
     "react-hook-form": "^7.63.0",
     "react-native": "0.81.4",
     "react-native-gesture-handler": "~2.28.0",
-    "react-native-mmkv": "^4.0.0",
     "react-native-reanimated": "~4.1.1",
     "react-native-safe-area-context": "~5.6.0",
     "react-native-screens": "~4.16.0",
@@ -47,7 +47,9 @@
     "react-native-worklets": "0.5.1",
     "reactotron-react-native": "^5.1.18",
     "tamagui": "^1.135.0",
-    "yup": "^1.7.1"
+    "yahoo-finance2": "^3.10.1",
+    "yup": "^1.7.1",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@testing-library/react-native": "^13.3.3",

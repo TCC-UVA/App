@@ -38,10 +38,6 @@ export const OnboardingView = ({
     );
   }, []);
 
-  const imgStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: float.value }],
-  }));
-
   const usePressScale = () => {
     const scale = useSharedValue(1);
     const style = useAnimatedStyle(() => ({
@@ -61,7 +57,7 @@ export const OnboardingView = ({
 
   return (
     <YStack flex={1} bg={"$background"}>
-      <Animated.View style={[{ width: "100%", height: 550 }, imgStyle]}>
+      <Animated.View style={[{ width: "100%", height: 550 }]}>
         <Image
           src={images.onboarding.first}
           width="100%"

@@ -1,10 +1,12 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "expo-router";
 import { useForm } from "react-hook-form";
+import { useCreatePortfolioContext } from "../context";
 import { CreateWalletFormData, createWalletSchema } from "./model";
 
 export const useCreateWalletViewModel = () => {
   const router = useRouter();
+  const { name, setName } = useCreatePortfolioContext();
   const {
     control,
     handleSubmit,
@@ -12,6 +14,9 @@ export const useCreateWalletViewModel = () => {
   } = useForm({
     mode: "onSubmit",
     defaultValues: { name: "" },
+    values: {
+      name,
+    },
     resolver: yupResolver(createWalletSchema),
   });
 
@@ -20,7 +25,8 @@ export const useCreateWalletViewModel = () => {
   };
 
   const onSubmit = (data: CreateWalletFormData) => {
-    router.navigate("/(signed-in)/select-stocks");
+    setName(data.name);
+    router.navigate("/(signed-in)/(create-portfolio)/select-stocks");
   };
 
   return {

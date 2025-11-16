@@ -27,7 +27,7 @@ export const CreateWalletView = ({
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 20}
       >
         <ScrollView
           contentContainerStyle={{
@@ -64,7 +64,7 @@ export const CreateWalletView = ({
             </YStack>
           </Animated.View>
 
-          <YStack gap="$4">
+          <YStack gap="$4" px="$2">
             <Animated.View
               entering={FadeInUp.delay(200).duration(600).springify()}
             >
@@ -79,25 +79,6 @@ export const CreateWalletView = ({
                   autoCapitalize="words"
                   icon="briefcase-outline"
                   autoFocus
-                />
-              </YStack>
-            </Animated.View>
-
-            <Animated.View
-              entering={FadeInUp.delay(300).duration(600).springify()}
-            >
-              <YStack gap="$2">
-                <Paragraph fontSize={14} color="$gray11" fontWeight="600">
-                  Descrição (opcional)
-                </Paragraph>
-                <ControlledInput
-                  name="description"
-                  control={control}
-                  placeholder="Descreva o objetivo desta carteira"
-                  autoCapitalize="sentences"
-                  icon="document-text-outline"
-                  multiline
-                  numberOfLines={4}
                 />
               </YStack>
             </Animated.View>

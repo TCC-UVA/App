@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
 import Animated, {
   useAnimatedStyle,
@@ -11,7 +11,7 @@ import { Input, InputProps, Text, XStack, YStack, useTheme } from "tamagui";
 type Props<T extends FieldValues> = InputProps & {
   name: Path<T>;
   control: Control<T>;
-  icon?: keyof typeof Ionicons.glyphMap;
+  icon?: keyof typeof Ionicons.glyphMap | ReactNode;
   onMask?: (value: string, previousValue?: string) => string;
 };
 
@@ -54,9 +54,11 @@ export const ControlledInput = <T extends FieldValues>({
           <YStack gap="$2">
             <Animated.View style={[animatedBorderStyle]}>
               <XStack alignItems="center" px="$3" py="$2">
-                {icon && (
+                {typeof icon === "object" ? (
+                  icon
+                ) : (
                   <Ionicons
-                    name={icon}
+                    name={icon as keyof typeof Ionicons.glyphMap}
                     size={20}
                     color={
                       isFocused
@@ -66,6 +68,7 @@ export const ControlledInput = <T extends FieldValues>({
                     style={{ marginRight: 8 }}
                   />
                 )}
+
                 <Input
                   {...field}
                   onChangeText={(text) => {

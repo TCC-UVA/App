@@ -37,7 +37,9 @@ describe("Login - ViewModel", () => {
   it("should call login mutation with correct credentials when submitted", async () => {
     const { result } = sut();
     const loginSpy = jest.spyOn(fakeService, "login").mockResolvedValue({
-      token: "mock-token",
+      access_token: "mock-token",
+      email: "mocked@test.com",
+      username: "mockedUser",
     });
 
     const mockedData = {
@@ -94,7 +96,9 @@ describe("Login - ViewModel", () => {
     const { result } = sut();
 
     jest.spyOn(fakeService, "login").mockResolvedValue({
-      token: "mock-token",
+      access_token: "mock-token",
+      email: "mocked@test.com",
+      username: "mockedUser",
     });
 
     expect(result.current.isLoading).toBe(false);
@@ -142,7 +146,9 @@ describe("Login - ViewModel", () => {
     const { result } = sut();
 
     jest.spyOn(fakeService, "login").mockResolvedValue({
-      token: "mock-token",
+      access_token: "mock-token",
+      email: "mocked@test.com",
+      username: "mockedUser",
     });
 
     act(() => {

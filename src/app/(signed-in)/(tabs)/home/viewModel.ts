@@ -12,7 +12,7 @@ export const useHomeViewModel = (service: WalletService) => {
   const debouncedSearch = useDebounce(search, 300);
 
   const handleGoToCreateWallet = () => {
-    router.navigate("/(signed-in)/create-wallet");
+    router.navigate("/(signed-in)/(create-portfolio)/create");
   };
 
   const { data: walletsData, isFetching } = useGetWalletsQuery(service);
