@@ -4,7 +4,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { FlatList } from "react-native";
 import { Button, Input, Paragraph, XStack, YStack, useTheme } from "tamagui";
 import { EmptyState } from "./components/empty";
-import { WalletCard, WalletCardSkeleton } from "./components/wallet-card";
+import { WalletCard } from "./components/wallet-card";
+import { WalletCardSkeleton } from "./components/wallet-card/skeleton";
 import { useHomeViewModel } from "./viewModel";
 
 export const HomeView = ({
@@ -14,6 +15,7 @@ export const HomeView = ({
   handleChangeDraftSearch,
   handleGoToCreateWallet,
   handleApplySearch,
+  handleEditWallet,
 }: ReturnType<typeof useHomeViewModel>) => {
   const theme = useTheme();
 
@@ -35,6 +37,7 @@ export const HomeView = ({
           <Paragraph fontSize={18} color="$gray11">
             Suas carteiras
           </Paragraph>
+
           <Paragraph fontSize={16} color="$gray11" ml="auto">
             {wallets?.length ?? 0} carteira
             {wallets && wallets.length !== 1 ? "s" : ""}
@@ -54,6 +57,7 @@ export const HomeView = ({
             clearButtonMode="while-editing"
           />
           <Button
+            testID="search-confirm-button"
             ml="$2"
             mt="$2"
             mb="$4"
@@ -89,9 +93,13 @@ export const HomeView = ({
         <FlatList
           data={wallets}
           renderItem={({ item, index }) => (
-            <WalletCard item={item} index={index} />
+            <WalletCard
+              item={item}
+              index={index}
+              onPress={() => handleEditWallet(item)}
+            />
           )}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.PortfolioId.toString() || ""}
           contentContainerStyle={{
             paddingHorizontal: 16,
             flexGrow: 1,

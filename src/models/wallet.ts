@@ -1,11 +1,10 @@
 export interface Wallet {
-  id: string;
   name: string;
-  description?: string;
-  stocksCount: number;
-  createdAt: string;
-  updatedAt: string;
-  totalValue?: number;
-  totalProfit?: number;
-  profitPercentage?: number;
+  PortfolioId: number;
+  Assets: Asset[];
+}
+
+export interface Asset {
+  name: string;
+  allocation: number;
 }

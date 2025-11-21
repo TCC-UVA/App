@@ -18,3 +18,17 @@ api.interceptors.request.use((config) => {
 
   return config;
 });
+
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (requestError) => {
+    const token = useAuthStore.getState().token;
+    const isUnauthorized = requestError.response?.status === 401;
+
+    if (token && isUnauthorized) {
+      useAuthStore.getState().reset();
+    }
+  }
+);

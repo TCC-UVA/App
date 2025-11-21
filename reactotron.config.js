@@ -8,5 +8,6 @@ Reactotron.configure({
     errors: true,
     log: true,
     asyncStorage: true,
+    
   })
   .connect();

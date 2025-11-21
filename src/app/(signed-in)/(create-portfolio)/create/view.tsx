@@ -1,12 +1,7 @@
 import { ControlledInput } from "@/src/components/controlled-Input";
 import { Layout } from "@/src/components/layout";
 import { Ionicons } from "@expo/vector-icons";
-import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 import { Button, H5, Paragraph, YStack, useTheme } from "tamagui";
 import { useCreateWalletViewModel } from "./viewModel";
@@ -16,7 +11,6 @@ const AnimatedButton = Animated.createAnimatedComponent(Button);
 export const CreateWalletView = ({
   control,
   onSubmit,
-  isLoading,
   handleSubmit,
   handleGoBack,
 }: ReturnType<typeof useCreateWalletViewModel>) => {
@@ -97,17 +91,8 @@ export const CreateWalletView = ({
               fontWeight="600"
               fontSize={16}
               onPress={handleSubmit(onSubmit)}
-              disabled={isLoading}
-              opacity={isLoading ? 0.7 : 1}
             >
-              {isLoading ? (
-                <ActivityIndicator
-                  testID="create-wallet-loading"
-                  color="white"
-                />
-              ) : (
-                "Continuar"
-              )}
+              Continuar
             </AnimatedButton>
           </Animated.View>
 
@@ -124,7 +109,6 @@ export const CreateWalletView = ({
               fontSize={16}
               onPress={handleGoBack}
               bg="transparent"
-              disabled={isLoading}
             >
               Cancelar
             </Button>

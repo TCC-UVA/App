@@ -1,8 +1,9 @@
+import { ConfirmActionSheet } from "@/src/components/base/confirm-action-sheet";
 import { Header } from "@/src/components/header";
 import { Layout } from "@/src/components/layout";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
-import { Button, Paragraph, Sheet, useTheme, YStack } from "tamagui";
+import { Button, useTheme } from "tamagui";
 import { useProfileViewModel } from "./viewModel";
 
 export const ProfileView = ({
@@ -19,36 +20,23 @@ export const ProfileView = ({
         </TouchableOpacity>
       </Header>
 
-      <Sheet
-        modal
-        open={signOutSheetOpen}
-        onOpenChange={handleToggleSignOutSheet}
-        snapPoints={[25]}
-        dismissOnSnapToBottom
-        zIndex={100_000}
+      <ConfirmActionSheet
+        isOpen={signOutSheetOpen}
+        onClose={handleToggleSignOutSheet}
+        title="Deseja realmente sair da sua conta?"
       >
-        <Sheet.Overlay enterStyle={{ opacity: 0 }} exitStyle={{ opacity: 0 }} />
-        <Sheet.Frame p="$5" gap="$5">
-          <YStack gap="$5" alignItems="center" flex={1} w={"100%"}>
-            <Paragraph size={"$4"}>
-              Deseja realmente sair da sua conta?
-            </Paragraph>
-            <YStack gap="$3" pb="$2" w={"100%"}>
-              <Button bg="$blue10" color="white" onPress={handleSignout}>
-                Sair
-              </Button>
-              <Button
-                variant="outlined"
-                borderColor="$gray8"
-                color="$gray12"
-                onPress={handleToggleSignOutSheet}
-              >
-                Cancelar
-              </Button>
-            </YStack>
-          </YStack>
-        </Sheet.Frame>
-      </Sheet>
+        <Button bg="$blue10" color="white" onPress={handleSignout}>
+          Sair
+        </Button>
+        <Button
+          variant="outlined"
+          borderColor="$gray8"
+          color="$gray12"
+          onPress={handleToggleSignOutSheet}
+        >
+          Cancelar
+        </Button>
+      </ConfirmActionSheet>
     </Layout>
   );
 };

@@ -97,6 +97,8 @@ export const SelectStocksView = ({
               onChangeText={handleSearchChange}
               borderWidth={0}
               bg="transparent"
+              autoCorrect={false}
+              autoComplete="off"
               focusStyle={{
                 borderWidth: 0,
                 outlineWidth: 0,
@@ -179,7 +181,13 @@ export const SelectStocksView = ({
                 )}
 
                 {searchQuery.length >= 3 && stocks && stocks.length > 0 && (
-                  <Paragraph fontSize={12} color="$gray11" px="$4" mt="$4" mb="$2">
+                  <Paragraph
+                    fontSize={12}
+                    color="$gray11"
+                    px="$4"
+                    mt="$4"
+                    mb="$2"
+                  >
                     Resultados da busca
                   </Paragraph>
                 )}

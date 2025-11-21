@@ -14,4 +14,5 @@ export interface Quote {
   industryDisp: string;
   dispSecIndFlag: boolean;
   isYahooFinance: boolean;
+  quantity?: number;
 }

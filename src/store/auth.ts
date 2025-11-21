@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { asyncStorage } from "../services/storage/async-storage";
-
 const AUTH_INITIAL_VALUES = {
   token: null,
   email: null,
@@ -26,7 +25,10 @@ export const useAuthStore = create<StateProps>()(
       setToken: (token: string) => set(() => ({ token })),
       setData: (email: string, username: string) =>
         set(() => ({ email, username })),
-      reset: () => set(() => AUTH_INITIAL_VALUES),
+      reset: () => {
+        set(() => AUTH_INITIAL_VALUES);
+        asyncStorage.removeItem("auth-storage");
+      },
     }),
     {
       name: "auth-storage",

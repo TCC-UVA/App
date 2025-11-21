@@ -1,30 +1,22 @@
+import { Wallet } from "@/src/models";
 import { Ionicons } from "@expo/vector-icons";
 import Animated, {
   FadeInUp,
   useAnimatedStyle,
   withSpring,
 } from "react-native-reanimated";
-import {
-  Card,
-  Circle,
-  H4,
-  H6,
-  Paragraph,
-  useTheme,
-  XStack,
-  YStack,
-} from "tamagui";
+import { Card, Circle, H6, Paragraph, useTheme, XStack, YStack } from "tamagui";
 
 const AnimatedCard = Animated.createAnimatedComponent(Card);
 
 export { WalletCardSkeleton } from "./skeleton";
 
 interface WalletCardProps {
-  item: any;
+  item: Wallet;
   index: number;
   isSelectingActive?: boolean;
   isSelected?: boolean;
-  onToggleSelect?: (id: string) => void;
+  onToggleSelect?: (id: number) => void;
 }
 
 export const WalletCard = ({
@@ -36,23 +28,9 @@ export const WalletCard = ({
 }: WalletCardProps) => {
   const theme = useTheme();
 
-  const profitColor =
-    item.profitPercentage > 0
-      ? "$green10"
-      : item.profitPercentage < 0
-      ? "$red10"
-      : "$gray11";
-  const profitBgColor =
-    item.profitPercentage > 0
-      ? "$green3"
-      : item.profitPercentage < 0
-      ? "$red3"
-      : "$gray3";
-  const profitSign = item.profitPercentage > 0 ? "+" : "";
-
   const handlePress = () => {
     if (isSelectingActive && onToggleSelect) {
-      onToggleSelect(item.id);
+      onToggleSelect(item.PortfolioId);
     }
   };
 
@@ -93,15 +71,14 @@ export const WalletCard = ({
           top={0}
           left={0}
           bottom={0}
-          width={6}
+          w={6}
           bg="$blue10"
           zIndex={10}
         />
       )}
 
-      <XStack padding="$4" gap="$3" alignItems="flex-start">
-        {/* Left: Checkbox or Icon */}
-        <YStack justifyContent="center" alignItems="center" width={50}>
+      <XStack p="$4" gap="$3" alignItems="flex-start">
+        <YStack justifyContent="center" alignItems="center" w={50}>
           {isSelectingActive ? (
             <Circle
               size={44}
@@ -109,8 +86,7 @@ export const WalletCard = ({
               borderColor={isSelected ? "$blue11" : "$gray7"}
               borderWidth={2}
               pressStyle={{ scale: 0.9 }}
-              onPress={() => onToggleSelect?.(item.id)}
-              animation="quick"
+              onPress={() => onToggleSelect?.(item.PortfolioId)}
             >
               {isSelected && (
                 <Ionicons name="checkmark" size={24} color="white" />
@@ -153,79 +129,10 @@ export const WalletCard = ({
                 color={String(theme.gray11?.val || "#888888")}
               />
               <Paragraph fontSize={13} color="$gray12" fontWeight="500">
-                {item.stocksCount || 0} ações
-              </Paragraph>
-            </XStack>
-
-            {/* Created Date */}
-            <XStack
-              alignItems="center"
-              gap="$1.5"
-              bg="$gray2"
-              px="$2.5"
-              py="$1.5"
-              borderRadius="$3"
-              flex={1}
-              minWidth={100}
-            >
-              <Ionicons
-                name="calendar-clear"
-                size={14}
-                color={String(theme.gray11?.val || "#888888")}
-              />
-              <Paragraph fontSize={13} color="$gray12" fontWeight="500">
-                {item.createdAt}
+                {item.Assets.length || 0} ações
               </Paragraph>
             </XStack>
           </XStack>
-
-          {/* Profit Badge */}
-          {item.profitPercentage !== undefined && (
-            <XStack alignItems="center" gap="$2" mt="$1">
-              <YStack
-                bg={profitBgColor}
-                px="$3"
-                py="$2"
-                borderRadius="$4"
-                borderColor={profitColor}
-                borderWidth={1.5}
-              >
-                <XStack alignItems="center" gap="$1.5">
-                  <Ionicons
-                    name={
-                      item.profitPercentage >= 0
-                        ? "trending-up"
-                        : "trending-down"
-                    }
-                    size={16}
-                    color={String(
-                      theme[profitColor.slice(1)]?.val || "#888888"
-                    )}
-                  />
-                  <Paragraph fontSize={15} color={profitColor} fontWeight="700">
-                    {profitSign}
-                    {item.profitPercentage.toFixed(2)}%
-                  </Paragraph>
-                </XStack>
-              </YStack>
-
-              {/* Total Value (if available) */}
-              {item.totalValue !== undefined && (
-                <YStack flex={1}>
-                  <Paragraph fontSize={11} color="$gray11" fontWeight="500">
-                    Valor total
-                  </Paragraph>
-                  <H4 fontSize={16} color="$color" fontWeight="700">
-                    R${" "}
-                    {item.totalValue.toLocaleString("pt-BR", {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
-                  </H4>
-                </YStack>
-              )}
-            </XStack>
-          )}
         </YStack>
       </XStack>
     </AnimatedCard>

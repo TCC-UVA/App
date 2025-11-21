@@ -1,14 +1,23 @@
 import { useDebounce } from "@/src/hooks/useDebounce";
+import { Wallet } from "@/src/models";
 import { Quote } from "@/src/models/quote";
 import { useGetStockQuery } from "@/src/services/queries";
 import { StockService } from "@/src/services/stocks";
-import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import { useCreatePortfolioContext } from "../context";
 
 export const useSelectStocksViewModel = (service: StockService) => {
   const { selectedStocks, setSelectedStocks } = useCreatePortfolioContext();
+  const { wallet, mode } = useLocalSearchParams<{
+    wallet: string;
+    mode?: string;
+  }>();
   const router = useRouter();
+  const isEditMode = mode === "edit";
+
+  const parsedWallet = wallet ? (JSON.parse(wallet) as Wallet) : null;
+  const existingAssets = parsedWallet?.Assets || [];
 
   const [selectedStocksDraft, setSelectedStocksDraft] = useState<Quote[]>(
     selectedStocks || []
@@ -25,6 +34,11 @@ export const useSelectStocksViewModel = (service: StockService) => {
         prev.filter((s) => s.symbol !== item.symbol)
       );
     }
+
+    if (selectedStocksDraft.length >= 2) {
+      setIsDropdownOpen(false);
+    }
+
     setSelectedStocksDraft((prev) => [...prev, item]);
   };
 
@@ -44,16 +58,55 @@ export const useSelectStocksViewModel = (service: StockService) => {
 
   const { data, isLoading } = useGetStockQuery(service, debouncedSearch);
 
+  console.log("existingAssets", existingAssets);
+
+  const filteredStocks =
+    isEditMode && data
+      ? data.filter((stock) =>
+          existingAssets.every((asset) => asset.name !== stock.symbol)
+        )
+      : data;
+
   const handleConfirm = () => {
     if (selectedStocksDraft.length === 0) return;
-    setSelectedStocks(selectedStocksDraft);
-    router.push({
-      pathname: "/(signed-in)/(create-portfolio)/allocate-percentages",
-    });
+
+    if (isEditMode && parsedWallet) {
+      const updatedAssets = [
+        ...selectedStocksDraft.map((stock) => ({
+          symbol: stock.symbol,
+          quantity: 0,
+        })),
+        ...parsedWallet.Assets.map((asset) => ({
+          symbol: asset.name,
+          quantity: asset.allocation,
+        })),
+      ];
+
+      setSelectedStocks([...(updatedAssets as Quote[])]);
+      router.push({
+        pathname: "/(signed-in)/(create-portfolio)/allocate-quantities",
+        params: {
+          id: parsedWallet.PortfolioId,
+        },
+      });
+    } else {
+      setSelectedStocks(selectedStocksDraft);
+      router.push({
+        pathname: "/(signed-in)/(create-portfolio)/allocate-quantities",
+      });
+    }
   };
 
+  useEffect(() => {
+    if (wallet) {
+      // You can parse and use the wallet data if needed
+      const parsedWallet = JSON.parse(wallet);
+      console.log("Creating portfolio for wallet:", parsedWallet);
+    }
+  }, [wallet]);
+
   return {
-    stocks: data,
+    stocks: filteredStocks,
     selectedStocks: selectedStocksDraft,
     isLoading: isLoading,
     handleSelectStock,

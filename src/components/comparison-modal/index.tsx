@@ -1,5 +1,5 @@
-import { Ionicons } from "@expo/vector-icons";
 import { Wallet } from "@/src/mock/wallets";
+import { Ionicons } from "@expo/vector-icons";
 import { ScrollView } from "react-native";
 import {
   Button,
@@ -109,7 +109,7 @@ export const ComparisonModal = ({
       <Dialog.Portal>
         <Dialog.Overlay
           key="overlay"
-          animation="quick"
+          animation="fast"
           opacity={0.5}
           enterStyle={{ opacity: 0 }}
           exitStyle={{ opacity: 0 }}
@@ -120,7 +120,7 @@ export const ComparisonModal = ({
           key="content"
           animateOnly={["transform", "opacity"]}
           animation={[
-            "quick",
+            "fast",
             {
               opacity: {
                 overshootClamping: true,

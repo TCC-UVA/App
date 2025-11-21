@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import Animated, { FadeInDown } from "react-native-reanimated";
-import { Button, H5, Paragraph, useTheme, YStack } from "tamagui";
+import { H5, Paragraph, useTheme, YStack } from "tamagui";
 
 export const EmptyState = () => {
   const theme = useTheme();
@@ -23,23 +23,11 @@ export const EmptyState = () => {
           />
         </YStack>
         <H5 color="$color" textAlign="center" fontWeight="700" mb="$2">
-          Nenhuma carteira ainda
+          Nenhuma carteira encontrada
         </H5>
         <Paragraph color="$gray11" textAlign="center" mb="$6">
           Crie sua primeira carteira de ações e comece a investir
         </Paragraph>
-        <Button
-          bg="$blue10"
-          color="white"
-          size="$4"
-          borderRadius="$4"
-          fontWeight="600"
-          fontSize={16}
-          onPress={() => {}}
-          icon={<Ionicons name="add" size={20} color="white" />}
-        >
-          Criar Carteira
-        </Button>
       </YStack>
     </Animated.View>
   );

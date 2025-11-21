@@ -2,13 +2,15 @@ import { ComparisonModal } from "@/src/components/comparison-modal";
 import { FloatButton } from "@/src/components/float-button";
 import { Header } from "@/src/components/header";
 import { Layout } from "@/src/components/layout";
-import { mockWallets } from "@/src/mock/wallets";
 import { FlatList } from "react-native";
 import { Button } from "tamagui";
-import { WalletCard } from "./components/wallet-card";
+import { EmptyState } from "./components/empty";
+import { WalletCard, WalletCardSkeleton } from "./components/wallet-card";
 import { useAnalyticsViewModel } from "./viewModel";
 
 export const AnalyticsView = ({
+  walletData,
+  isLoadingWallets,
   handleChangeIsSelectingActive,
   isSelectingActive,
   selectedWalletIds,
@@ -16,11 +18,12 @@ export const AnalyticsView = ({
   handleCompare,
   isComparisonModalOpen,
   closeComparisonModal,
+  isPendingCompare,
 }: ReturnType<typeof useAnalyticsViewModel>) => {
   const hasSelectedWallets = selectedWalletIds.size > 0;
 
-  const selectedWallets = mockWallets.filter((wallet) =>
-    selectedWalletIds.has(wallet.id)
+  const selectedWallets = walletData?.filter((wallet) =>
+    selectedWalletIds.has(wallet.PortfolioId)
   );
 
   return (
@@ -36,22 +39,32 @@ export const AnalyticsView = ({
         </Button>
       </Header>
 
-      <FlatList
-        data={mockWallets}
-        contentContainerStyle={{ paddingBottom: 100 }}
-        renderItem={({ item, index }) => (
-          <WalletCard
-            item={item}
-            index={index}
-            isSelectingActive={isSelectingActive}
-            isSelected={selectedWalletIds.has(item.id)}
-            onToggleSelect={toggleWalletSelection}
-          />
-        )}
-      />
+      {isLoadingWallets ? (
+        <FlatList
+          data={[0, 1, 2, 3, 4]}
+          contentContainerStyle={{ paddingBottom: 100 }}
+          renderItem={() => <WalletCardSkeleton />}
+        />
+      ) : (
+        <FlatList
+          data={walletData}
+          contentContainerStyle={{ paddingBottom: 100 }}
+          renderItem={({ item, index }) => (
+            <WalletCard
+              item={item}
+              index={index}
+              isSelectingActive={isSelectingActive}
+              isSelected={selectedWalletIds.has(item.PortfolioId)}
+              onToggleSelect={toggleWalletSelection}
+            />
+          )}
+          ListEmptyComponent={<EmptyState />}
+        />
+      )}
 
       {hasSelectedWallets && (
         <FloatButton
+          isLoading={isPendingCompare}
           text={`Comparar (${selectedWalletIds.size})`}
           handleConfirm={handleCompare}
         />
@@ -60,7 +73,7 @@ export const AnalyticsView = ({
       <ComparisonModal
         isOpen={isComparisonModalOpen}
         onClose={closeComparisonModal}
-        wallets={selectedWallets}
+        wallets={selectedWallets || []}
       />
     </Layout>
   );

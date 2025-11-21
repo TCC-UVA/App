@@ -14,6 +14,15 @@ const fakeService: AuthService = {
   register: jest.fn(),
 };
 
+jest.mock("@react-native-async-storage/async-storage", () => ({
+  __esModule: true,
+  default: {
+    setItem: jest.fn(),
+    getItem: jest.fn(),
+    removeItem: jest.fn(),
+  },
+}));
+
 const sut = () =>
   renderHook(() => useLoginViewModel(fakeService), {
     wrapper: createWrapper(),

@@ -12,16 +12,16 @@ import { RegisterView } from "../view";
 import { useRegisterViewModel } from "../viewModel";
 require("react-native-reanimated").setUpTests();
 
-jest.mock("expo-router", () => ({
-  useRouter: jest.fn(),
-  Link: ({ children }: any) => children,
-}));
-
 jest.mock("react-native-reanimated", () => {
   const Reanimated = require("react-native-reanimated/mock");
   Reanimated.default.call = () => {};
   return Reanimated;
 });
+
+jest.mock("expo-router", () => ({
+  useRouter: jest.fn(),
+  Link: ({ children }: any) => children,
+}));
 
 jest.mock("@expo/vector-icons", () => {
   const { View } = require("react-native");

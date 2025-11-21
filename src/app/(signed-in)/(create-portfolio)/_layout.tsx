@@ -11,7 +11,8 @@ export default function Layout() {
       >
         <Stack.Screen name="create" />
         <Stack.Screen name="select-stocks" />
-        <Stack.Screen name="allocate-percentages" />
+        <Stack.Screen name="allocate-quantities" />
+        <Stack.Screen name="edit-portfolio" />
       </Stack>
     </CreatePortfolioProvider>
   );
