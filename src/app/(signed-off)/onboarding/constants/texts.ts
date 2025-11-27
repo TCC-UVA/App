@@ -1,8 +1,8 @@
 export const onboardingTexts = {
   1: {
-    title: "Gerencie Seus Investimentos com Facilidade",
+    title: "Simule Seus Investimentos com Facilidade",
     description:
-      "Acompanhe todas as suas ações e rendimentos em um só lugar. Tenha o controle total da sua carteira sem complicações.",
+      "Simule ações e rendimentos em um só lugar. Projete o desempenho da sua carteira sem complicações e sem movimentar dinheiro real.",
   },
   2: {
     title: "Veja Seu Dinheiro Crescer",
@@ -12,6 +12,6 @@ export const onboardingTexts = {
   3: {
     title: "Comece Agora Mesmo",
     description:
-      "Junte-se a milhares de investidores satisfeitos e transforme a maneira como você gerencia seus investimentos hoje.",
+      "Junte-se a milhares de investidores satisfeitos e transforme a maneira como você simula seus investimentos hoje.",
   },
 };

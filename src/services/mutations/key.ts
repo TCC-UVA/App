@@ -6,4 +6,5 @@ export const mutationKeys = {
   POST_COMPARE_TWO_WALLETS: "post_compare_two_wallets",
   GET_PROFITS_BY_WALLET_ID: "get_profits_by_wallet_id",
   DELETE_WALLET: "delete_wallet",
+  GET_WALLET_AI_INSIGHT: "get_wallet_ai_insight",
 };

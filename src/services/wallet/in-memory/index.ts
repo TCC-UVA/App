@@ -1,10 +1,64 @@
 import { WalletService } from "..";
 import { CompareTwoWalletsRequestDto } from "../dto/compare-two-wallets-request.dto";
+import { CompareTwoWalletsResponseDto } from "../dto/compare-two-wallets-response.dto";
 import { CreateWalletRequestDto } from "../dto/create-request.dto";
 import { FindAllResponseDto } from "../dto/find-all-response.dto";
+import { GetAIInsightsRequestDto } from "../dto/get-ai-insights-request.dto";
+import { GetProfitsByWalletIdRequestDto } from "../dto/get-profits-by-wallet-id-request.dto";
+import { GetProfitsByWalletIdResponseDto } from "../dto/get-profits-by-wallet-id-response.dto";
 import { UpdateWalletRequestDto } from "../dto/update-request.dto";
 
 export class WalletServiceInMemory implements WalletService {
+  async compareTwoWallets(
+    params: CompareTwoWalletsRequestDto
+  ): Promise<CompareTwoWalletsResponseDto> {
+    return Promise.resolve({
+      "Portfolio 1": {
+        PortfolioId: 1,
+        PortfolioName: "Carteira 1",
+        ConsolidatedProfitability: "-12.34%",
+        FinalDate: Number(params.finalDate),
+        InitialDate: Number(params.initialDate),
+        Assets: {
+          "MOVI3.SA": "-66.42%",
+          "RENT3.SA": "-10.25%",
+          "RAPT4.SA": "5.67%",
+        },
+      },
+      "Portfolio 2": {
+        PortfolioId: 2,
+        PortfolioName: "Carteira 2",
+        ConsolidatedProfitability: "8.90%",
+        FinalDate: Number(params.finalDate),
+        InitialDate: Number(params.initialDate),
+        Assets: {
+          "ABCD3.SA": "15.30%",
+          "EFGH4.SA": "7.25%",
+          "IJKL4.SA": "-3.10%",
+        },
+      },
+      AbsoluteDifference: "21.24%",
+    });
+  }
+  async getProfitsByWalletId(
+    params: GetProfitsByWalletIdRequestDto
+  ): Promise<GetProfitsByWalletIdResponseDto> {
+    return Promise.resolve({
+      InitialDate: Number(params.initial_year),
+      FinalDate: Number(params.final_year),
+      ConsolidatedProfitability: "4.56%",
+      Assets: {
+        "ABCD3.SA": "10.25%",
+        "EFGH4.SA": "20.15%",
+        "IJKL4.SA": "5.50%",
+      },
+    } as GetProfitsByWalletIdResponseDto);
+  }
+  getAIInsights(params: GetAIInsightsRequestDto): Promise<string> {
+    return Promise.resolve(
+      "These are the AI-generated insights for your wallet."
+    );
+  }
   async findAll(): Promise<FindAllResponseDto> {
     return Promise.resolve({
       portfolios: {
@@ -62,12 +116,7 @@ export class WalletServiceInMemory implements WalletService {
   update(params: UpdateWalletRequestDto): Promise<void> {
     return Promise.resolve();
   }
-  compareTwoWallets(params: CompareTwoWalletsRequestDto): Promise<void> {
-    return Promise.resolve();
-  }
-  getProfitsByWalletId(): Promise<void> {
-    return Promise.resolve();
-  }
+
   delete(id: number): Promise<void> {
     return Promise.resolve();
   }

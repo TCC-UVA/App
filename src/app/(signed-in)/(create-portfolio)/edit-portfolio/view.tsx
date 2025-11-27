@@ -2,17 +2,13 @@ import { ConfirmActionSheet } from "@/src/components/base/confirm-action-sheet";
 import { Layout } from "@/src/components/layout";
 import { Ionicons } from "@expo/vector-icons";
 import { ActivityIndicator, FlatList, TouchableOpacity } from "react-native";
-import Animated, { FadeInDown, FadeInUp, FadeOutRight } from "react-native-reanimated";
+import Animated, {
+  FadeInDown,
+  FadeInUp,
+  FadeOutRight,
+} from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import {
-  Button,
-  Card,
-  H6,
-  Paragraph,
-  XStack,
-  YStack,
-  useTheme,
-} from "tamagui";
+import { Button, Card, H6, Paragraph, XStack, YStack, useTheme } from "tamagui";
 import { useEditPortfolioViewModel } from "./viewModel";
 
 const AnimatedCard = Animated.createAnimatedComponent(Card);
@@ -74,7 +70,7 @@ export const EditPortfolioView = ({
               {wallet.name}
             </H6>
             <Paragraph fontSize={13} color="$gray11" mt="$1">
-              {assets.length} {assets.length === 1 ? 'ativo' : 'ativos'}
+              {assets.length} {assets.length === 1 ? "ativo" : "ativos"}
             </Paragraph>
           </YStack>
           <TouchableOpacity onPress={handleToggleOptionsSheet}>
@@ -159,7 +155,9 @@ export const EditPortfolioView = ({
                     {item.name}
                   </H6>
                   <Paragraph fontSize={12} color="$gray11">
-                    {item.allocation ? `${item.allocation} ações` : "Quantidade não definida"}
+                    {item.allocation
+                      ? `${item.allocation}% de alocação`
+                      : "Porcentagem não definida"}
                   </Paragraph>
                 </YStack>
 
@@ -230,7 +228,8 @@ export const EditPortfolioView = ({
                     textAlign="center"
                     maxWidth={240}
                   >
-                    Adicione ativos à sua carteira para começar a gerenciar seus investimentos
+                    Adicione ativos à sua carteira para começar a gerenciar seus
+                    investimentos
                   </Paragraph>
                 </YStack>
                 <Button
@@ -240,7 +239,11 @@ export const EditPortfolioView = ({
                   borderRadius="$4"
                   mt="$2"
                   icon={
-                    <Ionicons name="add-circle-outline" size={20} color="white" />
+                    <Ionicons
+                      name="add-circle-outline"
+                      size={20}
+                      color="white"
+                    />
                   }
                 >
                   Adicionar Ativos
@@ -251,7 +254,6 @@ export const EditPortfolioView = ({
         />
       </YStack>
 
-      {/* Bottom Action Buttons */}
       {assets.length > 0 && (
         <AnimatedYStack
           entering={FadeInUp.delay(400).duration(500).springify()}
@@ -279,12 +281,19 @@ export const EditPortfolioView = ({
               pressStyle={{ opacity: 0.9, scale: 0.98 }}
               icon={
                 !isSaving ? (
-                  <Ionicons name="checkmark-circle-outline" size={22} color="white" />
+                  <Ionicons
+                    name="checkmark-circle-outline"
+                    size={22}
+                    color="white"
+                  />
                 ) : undefined
               }
             >
               {isSaving ? (
-                <ActivityIndicator testID="saving-changes-loading" color="white" />
+                <ActivityIndicator
+                  testID="saving-changes-loading"
+                  color="white"
+                />
               ) : (
                 "Salvar Alterações"
               )}
@@ -307,7 +316,6 @@ export const EditPortfolioView = ({
         </AnimatedYStack>
       )}
 
-      {/* Options Sheet */}
       <ConfirmActionSheet
         isOpen={showOptionsSheet}
         onClose={handleToggleOptionsSheet}
@@ -325,7 +333,10 @@ export const EditPortfolioView = ({
           }
         >
           {isDeleting ? (
-            <ActivityIndicator testID="deleting-wallet-button-loading" color="white" />
+            <ActivityIndicator
+              testID="deleting-wallet-button-loading"
+              color="white"
+            />
           ) : (
             "Deletar Carteira"
           )}
@@ -340,15 +351,16 @@ export const EditPortfolioView = ({
         </Button>
       </ConfirmActionSheet>
 
-      {/* Delete Confirmation Sheet */}
       <ConfirmActionSheet
         isOpen={deleteWalletSheetOpen}
         onClose={handleToggleDeleteWalletSheet}
+        snapPoints={[30]}
         title="Tem certeza que deseja apagar a carteira?"
       >
         <YStack gap="$3" mb="$3">
           <Paragraph color="$gray11" fontSize={14} textAlign="center">
-            Esta ação é irreversível. Todos os ativos e configurações desta carteira serão perdidos.
+            Esta ação é irreversível. Todos os ativos e configurações desta
+            carteira serão perdidos.
           </Paragraph>
         </YStack>
         <Button

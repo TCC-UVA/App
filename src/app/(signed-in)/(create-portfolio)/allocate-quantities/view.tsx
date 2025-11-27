@@ -31,14 +31,15 @@ export const AllocateQuantitiesView = ({
   onSubmit,
   handleGoBack,
   selectedStocks,
-  totalQuantity,
+  totalPercentage,
   clearAll,
   isLoading,
   isEditingMode,
 }: ReturnType<typeof useAllocateQuantitiesViewModel>) => {
   const theme = useTheme();
 
-  const isValid = totalQuantity > 0;
+  const isValid = totalPercentage === 100;
+  const isOverLimit = totalPercentage > 100;
 
   return (
     <Layout>
@@ -74,7 +75,7 @@ export const AllocateQuantitiesView = ({
               </TouchableOpacity>
               <YStack flex={1}>
                 <H6 color="$color" fontWeight="700" fontSize={18}>
-                  Alocar Quantidades
+                  Alocar Percentuais
                 </H6>
                 <Paragraph fontSize={13} color="$gray11" mt="$1">
                   {selectedStocks.length}{" "}
@@ -84,29 +85,59 @@ export const AllocateQuantitiesView = ({
             </XStack>
           </Animated.View>
 
-          {totalQuantity > 0 && (
-            <Animated.View
-              entering={FadeInDown.delay(200).duration(600).springify()}
+          <Animated.View
+            entering={FadeInDown.delay(200).duration(600).springify()}
+          >
+            <YStack
+              bg={isValid ? "$green2" : isOverLimit ? "$red2" : "$blue2"}
+              borderRadius="$4"
+              p="$3"
+              mb="$4"
+              borderWidth={1}
+              borderColor={
+                isValid ? "$green6" : isOverLimit ? "$red6" : "$blue6"
+              }
             >
-              <YStack
-                bg="$blue2"
-                borderRadius="$4"
-                p="$3"
-                mb="$4"
-                borderWidth={1}
-                borderColor="$blue6"
-              >
-                <XStack justifyContent="space-between" alignItems="center">
-                  <Paragraph fontSize={13} color="$gray11">
-                    Total alocado
-                  </Paragraph>
-                  <Paragraph color="$blue11" fontWeight="700" fontSize={16}>
-                    {totalQuantity} {totalQuantity === 1 ? "ação" : "ações"}
-                  </Paragraph>
+              <XStack justifyContent="space-between" alignItems="center" mb="$2">
+                <Paragraph fontSize={13} color="$gray11">
+                  Total alocado
+                </Paragraph>
+                <Paragraph
+                  color={
+                    isValid ? "$green11" : isOverLimit ? "$red11" : "$blue11"
+                  }
+                  fontWeight="700"
+                  fontSize={16}
+                >
+                  {totalPercentage.toFixed(1)}%
+                </Paragraph>
+              </XStack>
+              {/* Progress bar */}
+              <YStack gap="$1">
+                <XStack
+                  h={8}
+                  bg="$gray5"
+                  borderRadius="$2"
+                  overflow="hidden"
+                >
+                  <YStack
+                    w={`${Math.min(totalPercentage, 100)}%`}
+                    h="100%"
+                    bg={
+                      isValid ? "$green10" : isOverLimit ? "$red10" : "$blue10"
+                    }
+                  />
                 </XStack>
+                <Paragraph fontSize={11} color="$gray11" textAlign="right">
+                  {isValid
+                    ? "✓ Pronto para criar"
+                    : isOverLimit
+                    ? `${(totalPercentage - 100).toFixed(1)}% acima do limite`
+                    : `Faltam ${(100 - totalPercentage).toFixed(1)}%`}
+                </Paragraph>
               </YStack>
-            </Animated.View>
-          )}
+            </YStack>
+          </Animated.View>
 
           <Animated.View
             entering={FadeInDown.delay(300).duration(600).springify()}
@@ -122,14 +153,14 @@ export const AllocateQuantitiesView = ({
               onPress={clearAll}
               bg="transparent"
               mb="$4"
-              disabled={totalQuantity === 0}
-              opacity={totalQuantity === 0 ? 0.5 : 1}
+              disabled={totalPercentage === 0}
+              opacity={totalPercentage === 0 ? 0.5 : 1}
               icon={
                 <Ionicons
                   name="trash-outline"
                   size={18}
                   color={String(
-                    totalQuantity === 0 ? theme.gray10?.val : theme.red10?.val
+                    totalPercentage === 0 ? theme.gray10?.val : theme.red10?.val
                   )}
                 />
               }

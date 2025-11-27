@@ -1,5 +1,5 @@
 export interface GetProfitsByWalletIdRequestDto {
   walletId: number;
-  initialDate: string;
-  finalDate: string;
+  initial_year: string;
+  final_year: string;
 }

@@ -27,6 +27,7 @@ const mockedHandleApplySearch = jest.fn();
 const mockedHandleChangeDraftSearch = jest.fn();
 const mockedHandleEditWallet = jest.fn();
 const mockedHandleGoToCreateWallet = jest.fn();
+const mockedHandleOpenDetails = jest.fn();
 const sut = (customProps?: Partial<ReturnType<typeof useHomeViewModel>>) => {
   const methods = {
     draftSearch: "",
@@ -34,6 +35,7 @@ const sut = (customProps?: Partial<ReturnType<typeof useHomeViewModel>>) => {
     handleChangeDraftSearch: mockedHandleChangeDraftSearch,
     handleEditWallet: mockedHandleEditWallet,
     handleGoToCreateWallet: mockedHandleGoToCreateWallet,
+    handleOpenDetails: mockedHandleOpenDetails,
     isLoading: false,
     wallets: [],
     ...customProps,
@@ -55,6 +57,16 @@ describe("Home - View", () => {
     const { getByText } = sut();
 
     expect(getByText("Nenhuma carteira encontrada")).toBeTruthy();
+    expect(
+      getByText("Crie sua primeira carteira de ações e comece a investir")
+    ).toBeTruthy();
+  });
+
+  it("should render search empty state when search yields no results", async () => {
+    const { getByText } = sut({ draftSearch: "Nonexistent Wallet" });
+
+    expect(getByText("Nenhuma carteira encontrada")).toBeTruthy();
+    expect(getByText("Nenhuma carteira corresponde à sua busca.")).toBeTruthy();
   });
 
   it("Should render loading state when isLoading is true", async () => {
@@ -125,22 +137,40 @@ describe("Home - View", () => {
     expect(getByText("2 ações")).toBeTruthy();
   });
 
-  it("Should call handleEditWallet when a wallet card is pressed", async () => {
+  it("Should call handleEditWallet when a edit button is pressed", async () => {
     const wallet = {
       name: "Wallet 1",
       Assets: [{ name: "Asset 1", allocation: 100 }],
       PortfolioId: 1,
     };
-    const { getByText } = sut({
+    const { getByText, getByTestId } = sut({
       wallets: [wallet],
     });
 
-    const walletCard = getByText("Wallet 1");
+    const editButton = getByTestId("edit-wallet-btn");
     act(() => {
-      fireEvent.press(walletCard);
+      fireEvent.press(editButton);
     });
 
     expect(mockedHandleEditWallet).toHaveBeenCalledWith(wallet);
+  });
+
+  it("Should call handleOpenDetails when a details button is pressed", async () => {
+    const wallet = {
+      name: "Wallet 1",
+      Assets: [{ name: "Asset 1", allocation: 100 }],
+      PortfolioId: 1,
+    };
+    const { getByTestId } = sut({
+      wallets: [wallet],
+    });
+
+    const detailsButton = getByTestId("details-wallet-btn");
+    act(() => {
+      fireEvent.press(detailsButton);
+    });
+
+    expect(mockedHandleOpenDetails).toHaveBeenCalledWith(wallet);
   });
 
   it("Should render empty state when search yields no results", async () => {
@@ -196,5 +226,18 @@ describe("Home - View", () => {
     });
 
     expect(getByText("0 carteiras")).toBeTruthy();
+  });
+
+  it("Should render details sheet when isDetailsModalOpen is true", async () => {
+    const { getByText } = sut({
+      isDetailsModalOpen: true,
+      selectedWallet: {
+        name: "Wallet 1",
+        Assets: [{ name: "Asset 1", allocation: 100 }],
+        PortfolioId: 1,
+      },
+    });
+
+    expect(getByText("Detalhes da Carteira")).toBeTruthy();
   });
 });

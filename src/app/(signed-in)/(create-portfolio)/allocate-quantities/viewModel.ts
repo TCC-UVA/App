@@ -47,13 +47,11 @@ export const useAllocateQuantitiesViewModel = (service: WalletService) => {
     })),
   });
 
-  const totalQuantity =
+  const totalPercentage =
     allocations?.reduce(
       (total, allocation) => total + (allocation?.quantity || 0),
       0
     ) || 0;
-
-  console.log("totalQuantity", totalQuantity);
 
   const onSubmit = (data: AllocateQuantitiesFormData) => {
     if (!data.allocations) return;
@@ -75,7 +73,7 @@ export const useAllocateQuantitiesViewModel = (service: WalletService) => {
           onSuccess: () => {
             toast.success(
               "Carteira atualizada com sucesso!",
-              "Sua carteira foi atualizada e as quantidades foram alocadas."
+              "Sua carteira foi atualizada e os percentuais foram alocados."
             );
             router.replace("/(signed-in)/(tabs)/home");
           },
@@ -93,7 +91,7 @@ export const useAllocateQuantitiesViewModel = (service: WalletService) => {
         onSuccess: () => {
           toast.success(
             "Carteira criada com sucesso!",
-            "Sua carteira foi criada e as quantidades foram alocadas."
+            "Sua carteira foi criada e os percentuais foram alocados."
           );
           router.replace("/(signed-in)/(tabs)/home");
         },
@@ -117,8 +115,8 @@ export const useAllocateQuantitiesViewModel = (service: WalletService) => {
     });
 
     toast.info(
-      "Quantidades limpas",
-      "Todas as quantidades foram resetadas para 0"
+      "Percentuais limpos",
+      "Todos os percentuais foram resetados para 0"
     );
   };
 
@@ -129,7 +127,7 @@ export const useAllocateQuantitiesViewModel = (service: WalletService) => {
     onSubmit,
     handleGoBack,
     selectedStocks,
-    totalQuantity,
+    totalPercentage,
     clearAll,
     isLoading: isCreatingWallet || isUpdatingWallet,
   };

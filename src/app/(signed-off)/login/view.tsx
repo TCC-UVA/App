@@ -45,7 +45,7 @@ export const LoginView = ({
             Faça seu login
           </H5>
           <Paragraph color="$gray11" textAlign="center">
-            Gerencie suas finanças com facilidade
+            Simule suas finanças com facilidade
           </Paragraph>
         </YStack>
       </Animated.View>

@@ -54,10 +54,10 @@ export const StockCard = ({
             </YStack>
             <YStack flex={1}>
               <H4 fontSize={14} color="$color" fontWeight="700" mb="$1">
-                {item.symbol}
+                {item?.symbol || "--"}
               </H4>
               <Paragraph fontSize={14} color="$gray11" numberOfLines={1}>
-                {item.shortname}
+                {item?.longname || item?.shortname || "Nome indisponível"}
               </Paragraph>
             </YStack>
           </XStack>

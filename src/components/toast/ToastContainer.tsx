@@ -1,6 +1,6 @@
 import React from "react";
-import { YStack } from "tamagui";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { YStack } from "tamagui";
 import { useToastContext } from "./ToastContext";
 import { ToastItem } from "./ToastItem";
 
@@ -16,7 +16,7 @@ export const ToastContainer: React.FC = () => {
       top={top + 8}
       left={0}
       right={0}
-      zIndex={9999}
+      zIndex={10000}
       pointerEvents="box-none"
     >
       {toasts.map((toast) => (

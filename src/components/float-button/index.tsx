@@ -7,12 +7,14 @@ type FloatButtonProps = {
   isLoading?: boolean;
   handleConfirm: () => void;
   text: string;
+  disabled?: boolean;
 };
 
 export const FloatButton = ({
   handleConfirm,
   text,
   isLoading = false,
+  disabled = false,
 }: FloatButtonProps) => {
   const { bottom } = useSafeAreaInsets();
   return (
@@ -38,8 +40,8 @@ export const FloatButton = ({
           fontWeight="600"
           fontSize={16}
           onPress={handleConfirm}
-          disabled={isLoading}
-          opacity={isLoading ? 0.7 : 1}
+          disabled={isLoading || disabled}
+          opacity={isLoading || disabled ? 0.7 : 1}
         >
           {isLoading ? (
             <ActivityIndicator testID="confirm-stocks-loading" color="white" />

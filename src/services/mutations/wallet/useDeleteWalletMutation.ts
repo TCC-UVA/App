@@ -8,7 +8,7 @@ import { FindAllResponseDto } from "../../wallet/dto/find-all-response.dto";
 import { mutationKeys } from "../key";
 
 export const useDeleteWalletMutation = (service: WalletService) => {
-  const { success } = useToast();
+  const { success, error } = useToast();
   const router = useRouter();
   const queryClient = useQueryClient();
   const token = useAuthStore((state) => state.token);
@@ -30,6 +30,9 @@ export const useDeleteWalletMutation = (service: WalletService) => {
       queryClient.setQueryData([QueryKeys.GET_WALLETS, token], filteredData);
       success("Carteira deletada com sucesso.");
       router.replace("/(signed-in)/(tabs)/home");
+    },
+    onError: () => {
+      error("Não foi possível deletar a carteira. Tente novamente mais tarde.");
     },
   });
 };

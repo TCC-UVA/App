@@ -13,7 +13,7 @@ export class StockServiceHttp implements StockService {
     const response = await financialApi.get<SearchAssetsResponseDto>(
       "/search",
       {
-        params: { q: search },
+        params: { q: search, region: "BR" },
       }
     );
     return response.data;

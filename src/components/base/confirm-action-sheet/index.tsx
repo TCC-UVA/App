@@ -5,12 +5,14 @@ type ConfirmActionSheetProps = {
   title: string;
   onClose: () => void;
   isOpen: boolean;
+  snapPoints?: number[];
 };
 
 export const ConfirmActionSheet = ({
   isOpen,
   onClose,
   title,
+  snapPoints = [25],
   children,
 }: PropsWithChildren<ConfirmActionSheetProps>) => {
   return (
@@ -18,7 +20,7 @@ export const ConfirmActionSheet = ({
       modal
       open={isOpen}
       onOpenChange={onClose}
-      snapPoints={[25]}
+      snapPoints={snapPoints}
       dismissOnSnapToBottom
       zIndex={100_000}
     >

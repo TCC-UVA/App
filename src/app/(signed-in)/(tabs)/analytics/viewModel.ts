@@ -1,9 +1,5 @@
-import {
-  useCompareTwoWalletsMutation,
-  useGetWalletProfitMutation,
-} from "@/src/services/mutations";
+import { useCompareTwoWalletsMutation } from "@/src/services/mutations";
 import { useGetWalletsQuery } from "@/src/services/queries";
-import { format, startOfYear } from "date-fns";
 import { useState } from "react";
 import { AnalyticsViewModelProps } from "./model";
 
@@ -13,16 +9,22 @@ export const useAnalyticsViewModel = ({
   const { data: walletData, isLoading: isLoadingWallets } =
     useGetWalletsQuery(walletService);
 
-  const { mutate: onCompareTwoWallets, isPending: isPendingCompare } =
-    useCompareTwoWalletsMutation(walletService);
-
-  const { mutate: onGetWalletProfit, isPending: isPendingGetProfit } =
-    useGetWalletProfitMutation(walletService);
+  const {
+    mutate: onCompareTwoWallets,
+    isPending: isPendingCompare,
+    data: comparisonData,
+  } = useCompareTwoWalletsMutation(walletService);
   const [isSelectingActive, setIsSelectingActive] = useState(false);
   const [selectedWalletIds, setSelectedWalletIds] = useState<Set<number>>(
     new Set()
   );
   const [isComparisonModalOpen, setIsComparisonModalOpen] = useState(false);
+
+  // Year selection state
+  const currentYear = new Date().getFullYear().toString();
+  const lastYear = (new Date().getFullYear() - 1).toString();
+  const [initialYear, setInitialYear] = useState(lastYear);
+  const [finalYear, setFinalYear] = useState(currentYear);
 
   const handleChangeIsSelectingActive = () => {
     setIsSelectingActive((prev) => {
@@ -41,6 +43,10 @@ export const useAnalyticsViewModel = ({
       if (newSet.has(walletId)) {
         newSet.delete(walletId);
       } else {
+        // Limit to 2 portfolios
+        if (newSet.size >= 2) {
+          return prev; // Don't allow more than 2 selections
+        }
         newSet.add(walletId);
       }
       return newSet;
@@ -48,19 +54,22 @@ export const useAnalyticsViewModel = ({
   };
 
   const handleCompare = () => {
-    if (selectedWalletIds.size === 0) return;
+    if (selectedWalletIds.size !== 2) return;
 
-    // onGetWalletProfit({
-    //   initialDate: format(startOfYear(new Date()), "yyyy-MM-dd"),
-    //   finalDate: format(new Date(), "yyyy-MM-dd"),
-    //   walletId: Array.from(selectedWalletIds)[0],
-    // });
-    onCompareTwoWallets({
-      initialDate: format(startOfYear(new Date()), "yyyy-MM-dd"),
-      finalDate: format(new Date(), "yyyy-MM-dd"),
-      firstWalletId: Array.from(selectedWalletIds)[0],
-      secondWalletId: Array.from(selectedWalletIds)[1],
-    });
+    const walletIds = Array.from(selectedWalletIds);
+    onCompareTwoWallets(
+      {
+        initialDate: initialYear,
+        finalDate: finalYear,
+        firstWalletId: walletIds[0],
+        secondWalletId: walletIds[1],
+      },
+      {
+        onSuccess: () => {
+          setIsComparisonModalOpen(true);
+        },
+      }
+    );
   };
 
   const closeComparisonModal = () => {
@@ -77,6 +86,14 @@ export const useAnalyticsViewModel = ({
     handleCompare,
     isComparisonModalOpen,
     closeComparisonModal,
-    isPendingCompare: isPendingCompare || isPendingGetProfit,
+    isPendingCompare,
+    comparisonData,
+    // Year selection
+    initialYear,
+    finalYear,
+    setInitialYear,
+    setFinalYear,
+    currentYear,
+    lastYear,
   };
 };

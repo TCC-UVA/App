@@ -1,15 +1,23 @@
 import { api } from "../api";
 import { CompareTwoWalletsRequestDto } from "./dto/compare-two-wallets-request.dto";
+import { CompareTwoWalletsResponseDto } from "./dto/compare-two-wallets-response.dto";
 import { CreateWalletRequestDto } from "./dto/create-request.dto";
 import { FindAllResponseDto } from "./dto/find-all-response.dto";
+import { GetAIInsightsRequestDto } from "./dto/get-ai-insights-request.dto";
 import { GetProfitsByWalletIdRequestDto } from "./dto/get-profits-by-wallet-id-request.dto";
+import { GetProfitsByWalletIdResponseDto } from "./dto/get-profits-by-wallet-id-response.dto";
 import { UpdateWalletRequestDto } from "./dto/update-request.dto";
 export interface WalletService {
   findAll: () => Promise<FindAllResponseDto>;
   create: (params: CreateWalletRequestDto) => Promise<string>;
   update: (params: UpdateWalletRequestDto) => Promise<void>;
-  compareTwoWallets: (params: CompareTwoWalletsRequestDto) => Promise<void>;
-  getProfitsByWalletId(params: GetProfitsByWalletIdRequestDto): Promise<void>;
+  compareTwoWallets: (
+    params: CompareTwoWalletsRequestDto
+  ) => Promise<CompareTwoWalletsResponseDto>;
+  getProfitsByWalletId(
+    params: GetProfitsByWalletIdRequestDto
+  ): Promise<GetProfitsByWalletIdResponseDto>;
+  getAIInsights(params: GetAIInsightsRequestDto): Promise<string>;
   delete: (id: number) => Promise<void>;
 }
 
@@ -34,8 +42,10 @@ export class WalletServiceHttp implements WalletService {
     });
   }
 
-  async compareTwoWallets(params: CompareTwoWalletsRequestDto): Promise<void> {
-    const response = await api.get(
+  async compareTwoWallets(
+    params: CompareTwoWalletsRequestDto
+  ): Promise<CompareTwoWalletsResponseDto> {
+    const response = await api.get<CompareTwoWalletsResponseDto>(
       `/compare_portfolios/${params.firstWalletId}/${params.secondWalletId}/${params.initialDate}/${params.finalDate}`
     );
 
@@ -44,16 +54,27 @@ export class WalletServiceHttp implements WalletService {
 
   async getProfitsByWalletId(
     params: GetProfitsByWalletIdRequestDto
-  ): Promise<void> {
-    const response = await api.get(`/portfolio_profitabilty_by_id`, {
-      params: {
-        portfolio_id: params.walletId,
-        initial_date: params.initialDate,
-        final_date: params.finalDate,
-      },
+  ): Promise<GetProfitsByWalletIdResponseDto> {
+    const response = await api.get<GetProfitsByWalletIdResponseDto>(
+      `/portfolio_profitabilty_by_id`,
+      {
+        params: {
+          portfolio_id: params.walletId,
+          initial_year: params.initial_year,
+          final_year: params.final_year,
+        },
+      }
+    );
+    return response.data;
+  }
+
+  async getAIInsights(params: GetAIInsightsRequestDto): Promise<string> {
+    const response = await api.post<string>(`/gemini_portfolio_profitability`, {
+      ...params,
     });
     return response.data;
   }
+
   async delete(id: number): Promise<void> {
     await api.delete(`/delete_portfolio/${id}`);
   }

@@ -5,6 +5,7 @@ import {
   useUpdateWalletMutation,
 } from "@/src/services/mutations";
 import { WalletService } from "@/src/services/wallet";
+import { recalculateAllocation } from "@/src/utils/recalculate-allocation";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { useCreatePortfolioContext } from "../context";
@@ -76,9 +77,12 @@ export const useEditPortfolioViewModel = (service: WalletService) => {
   };
 
   const handleDeletePortfolio = () => {
-    handleToggleDeleteWalletSheet();
-    handleToggleOptionsSheet();
-    onDeleteWallet(wallet.PortfolioId, {});
+    onDeleteWallet(wallet.PortfolioId, {
+      onSettled: () => {
+        handleToggleDeleteWalletSheet();
+        handleToggleOptionsSheet();
+      },
+    });
   };
 
   const handleToggleDeleteWalletSheet = () => {
@@ -92,9 +96,19 @@ export const useEditPortfolioViewModel = (service: WalletService) => {
   const handleSaveChanges = () => {
     if (!hasChanges || !wallet) return;
 
+    const deletedAssets = wallet.Assets.filter(
+      (asset) => !assets.some((a) => a.name === asset.name)
+    );
+
+    const allocationRedistributed = recalculateAllocation({
+      assets: wallet.Assets,
+      deletedIds: deletedAssets.map((asset) => asset.name),
+      decimalPlaces: 2,
+    });
+
     const updateData = {
       id: wallet.PortfolioId,
-      assets: assets.map((asset) => ({
+      assets: allocationRedistributed.map((asset) => ({
         Name: asset.name,
         Allocation: asset.allocation || 0,
       })),

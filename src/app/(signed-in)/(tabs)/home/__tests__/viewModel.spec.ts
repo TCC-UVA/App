@@ -157,4 +157,152 @@ describe("Home - ViewModel", () => {
       expect(result.current.wallets).toHaveLength(3);
     });
   });
+
+  it("should selected wallet when handleOpenDetails is called", async () => {
+    const { result } = sut();
+
+    const wallet = {
+      Assets: [],
+      PortfolioId: 1,
+      name: "Carteira Teste",
+    } as Wallet;
+
+    act(() => {
+      result.current.handleOpenDetails(wallet);
+    });
+
+    await waitFor(() => {
+      expect(result.current.selectedWallet).toBe(wallet);
+      expect(result.current.isDetailsModalOpen).toBe(true);
+    });
+  });
+
+  it("should call handleGetMetrics when handleOpenDetails is called", async () => {
+    const { result } = sut();
+    const mockedServiceSpy = jest.spyOn(mockedService, "getProfitsByWalletId");
+
+    const wallet = {
+      Assets: [],
+      PortfolioId: 1,
+      name: "Carteira Teste",
+    } as Wallet;
+
+    act(() => {
+      result.current.handleOpenDetails(wallet);
+    });
+
+    await waitFor(() => {
+      expect(mockedServiceSpy).toHaveBeenCalledWith({
+        walletId: wallet.PortfolioId,
+        initial_year: (new Date().getFullYear() - 1).toString(),
+        final_year: new Date().getFullYear().toString(),
+      });
+    });
+  });
+
+  it("should clear selected wallet when handleCloseDetails is called", async () => {
+    const { result } = sut();
+
+    const wallet = {
+      Assets: [],
+      PortfolioId: 1,
+      name: "Carteira Teste",
+    } as Wallet;
+
+    act(() => {
+      result.current.handleOpenDetails(wallet);
+    });
+
+    await waitFor(() => {
+      expect(result.current.selectedWallet).toBe(wallet);
+      expect(result.current.isDetailsModalOpen).toBe(true);
+    });
+
+    act(() => {
+      result.current.handleCloseDetails();
+    });
+
+    await waitFor(() => {
+      expect(result.current.selectedWallet).toBeNull();
+      expect(result.current.isDetailsModalOpen).toBe(false);
+    });
+  });
+
+  it("Should escape from get AI insights if walletProfitData or selectedWallet is null", async () => {
+    const { result } = sut();
+
+    act(() => {
+      result.current.handleGetAIInsights();
+    });
+
+    expect(useRouter().push).not.toHaveBeenCalled();
+  });
+
+  it("Should navigate to AI insights screen with correct params", async () => {
+    const { result } = sut();
+
+    const wallet = {
+      Assets: [],
+      PortfolioId: 1,
+      name: "Carteira Teste",
+    } as Wallet;
+
+    act(() => {
+      result.current.handleOpenDetails(wallet);
+    });
+
+    await waitFor(() => {
+      expect(result.current.selectedWallet).toBe(wallet);
+      expect(result.current.walletProfitData).toBeDefined();
+    });
+
+    act(() => {
+      result.current.handleGetAIInsights();
+    });
+
+    const expectedParams = JSON.stringify({
+      InitialDate: Number((new Date().getFullYear() - 1).toString()),
+      FinalDate: Number(new Date().getFullYear().toString()),
+      ConsolidatedProfitability: "4.56%",
+      Assets: {
+        "ABCD3.SA": "10.25%",
+        "EFGH4.SA": "20.15%",
+        "IJKL4.SA": "5.50%",
+      },
+      walletName: wallet.name,
+    });
+
+    expect(useRouter().push).toHaveBeenCalledWith({
+      pathname: "/(signed-in)/ai-insights",
+      params: {
+        walletName: wallet.name,
+        params: expectedParams,
+      },
+    });
+  });
+
+  it("should close details modal when handleGetAIInsights is called", async () => {
+    const { result } = sut();
+
+    const wallet = {
+      Assets: [],
+      PortfolioId: 1,
+      name: "Carteira Teste",
+    } as Wallet;
+
+    act(() => {
+      result.current.handleOpenDetails(wallet);
+    });
+
+    await waitFor(() => {
+      expect(result.current.selectedWallet).toBe(wallet);
+      expect(result.current.walletProfitData).toBeDefined();
+    });
+
+    act(() => {
+      result.current.handleGetAIInsights();
+    });
+
+    expect(result.current.isDetailsModalOpen).toBe(false);
+  });
 });

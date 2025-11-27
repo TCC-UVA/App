@@ -4,7 +4,7 @@ import { Quote } from "@/src/models/quote";
 import { useGetStockQuery } from "@/src/services/queries";
 import { StockService } from "@/src/services/stocks";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useCreatePortfolioContext } from "../context";
 
 export const useSelectStocksViewModel = (service: StockService) => {
@@ -58,8 +58,6 @@ export const useSelectStocksViewModel = (service: StockService) => {
 
   const { data, isLoading } = useGetStockQuery(service, debouncedSearch);
 
-  console.log("existingAssets", existingAssets);
-
   const filteredStocks =
     isEditMode && data
       ? data.filter((stock) =>
@@ -96,14 +94,6 @@ export const useSelectStocksViewModel = (service: StockService) => {
       });
     }
   };
-
-  useEffect(() => {
-    if (wallet) {
-      // You can parse and use the wallet data if needed
-      const parsedWallet = JSON.parse(wallet);
-      console.log("Creating portfolio for wallet:", parsedWallet);
-    }
-  }, [wallet]);
 
   return {
     stocks: filteredStocks,

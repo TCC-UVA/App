@@ -2,7 +2,11 @@ import { Ionicons } from "@expo/vector-icons";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { H5, Paragraph, useTheme, YStack } from "tamagui";
 
-export const EmptyState = () => {
+type EmptyStateProps = {
+  isBySearch?: boolean;
+};
+
+export const EmptyState = ({ isBySearch }: EmptyStateProps) => {
   const theme = useTheme();
   return (
     <Animated.View entering={FadeInDown.duration(600).springify()}>
@@ -26,7 +30,9 @@ export const EmptyState = () => {
           Nenhuma carteira encontrada
         </H5>
         <Paragraph color="$gray11" textAlign="center" mb="$6">
-          Crie sua primeira carteira de ações e comece a investir
+          {isBySearch
+            ? "Nenhuma carteira corresponde à sua busca."
+            : "Crie sua primeira carteira de ações e comece a investir"}
         </Paragraph>
       </YStack>
     </Animated.View>

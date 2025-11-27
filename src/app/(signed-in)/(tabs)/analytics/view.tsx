@@ -3,7 +3,7 @@ import { FloatButton } from "@/src/components/float-button";
 import { Header } from "@/src/components/header";
 import { Layout } from "@/src/components/layout";
 import { FlatList } from "react-native";
-import { Button } from "tamagui";
+import { Button, Input, Paragraph, Separator, XStack, YStack } from "tamagui";
 import { EmptyState } from "./components/empty";
 import { WalletCard, WalletCardSkeleton } from "./components/wallet-card";
 import { useAnalyticsViewModel } from "./viewModel";
@@ -19,12 +19,15 @@ export const AnalyticsView = ({
   isComparisonModalOpen,
   closeComparisonModal,
   isPendingCompare,
+  comparisonData,
+  initialYear,
+  finalYear,
+  setInitialYear,
+  setFinalYear,
+  currentYear,
+  lastYear,
 }: ReturnType<typeof useAnalyticsViewModel>) => {
-  const hasSelectedWallets = selectedWalletIds.size > 0;
-
-  const selectedWallets = walletData?.filter((wallet) =>
-    selectedWalletIds.has(wallet.PortfolioId)
-  );
+  const canCompare = selectedWalletIds.size === 2;
 
   return (
     <Layout>
@@ -38,6 +41,47 @@ export const AnalyticsView = ({
           {isSelectingActive ? "Cancelar" : "Selecionar"}
         </Button>
       </Header>
+
+      {/* Year Selection Section */}
+      {isSelectingActive && (
+        <YStack px="$4" pt="$3" pb="$2" gap="$3" bg="$background">
+          <Paragraph fontSize={14} color="$gray11" fontWeight="600">
+            Selecione o período para comparação
+          </Paragraph>
+          <XStack gap="$3">
+            <YStack flex={1} gap="$2">
+              <Paragraph fontSize={12} color="$gray10">
+                Ano Inicial
+              </Paragraph>
+              <Input
+                value={initialYear}
+                onChangeText={setInitialYear}
+                placeholder={lastYear}
+                keyboardType="numeric"
+                fontSize={14}
+                bg="$gray3"
+              />
+            </YStack>
+            <YStack flex={1} gap="$2">
+              <Paragraph fontSize={12} color="$gray10">
+                Ano Final
+              </Paragraph>
+              <Input
+                value={finalYear}
+                onChangeText={setFinalYear}
+                placeholder={currentYear}
+                keyboardType="numeric"
+                fontSize={14}
+                bg="$gray3"
+              />
+            </YStack>
+          </XStack>
+          <Paragraph fontSize={12} color="$blue10" fontWeight="500">
+            Selecione exatamente 2 carteiras para comparar ({selectedWalletIds.size}/2)
+          </Paragraph>
+          <Separator />
+        </YStack>
+      )}
 
       {isLoadingWallets ? (
         <FlatList
@@ -62,18 +106,19 @@ export const AnalyticsView = ({
         />
       )}
 
-      {hasSelectedWallets && (
+      {canCompare && (
         <FloatButton
           isLoading={isPendingCompare}
-          text={`Comparar (${selectedWalletIds.size})`}
+          text="Comparar 2 Carteiras"
           handleConfirm={handleCompare}
+          disabled={!initialYear || !finalYear}
         />
       )}
 
       <ComparisonModal
         isOpen={isComparisonModalOpen}
         onClose={closeComparisonModal}
-        wallets={selectedWallets || []}
+        comparisonData={comparisonData}
       />
     </Layout>
   );
