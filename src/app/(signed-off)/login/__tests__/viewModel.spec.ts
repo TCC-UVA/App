@@ -68,7 +68,9 @@ describe("Login - ViewModel", () => {
       const response = await loginSpy.mock.results[0].value;
 
       expect(response).toEqual({
-        token: "mock-token",
+        access_token: "mock-token",
+        email: "mocked@test.com",
+        username: "mockedUser",
       });
     });
   });
