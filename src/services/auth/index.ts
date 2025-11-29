@@ -23,12 +23,35 @@ export class AuthServiceHttp implements AuthService {
   }
 
   async register(params: RegisterRequestDto): Promise<RegisterResponseDto> {
+    // try {
     const response = await api.post<RegisterResponseDto>("/user", {
       Name: params.name,
       Email: params.email,
       Password: params.password,
       BirthDate: params.birthDate,
     });
+
     return response.data;
+    // } catch (error) {
+    //   console.log("catch", error.response);
+
+    //   if (axios.isAxiosError(error)) {
+    //     console.log("here");
+
+    //     const statusCode = error.response?.status;
+    //     if (statusCode === 409) {
+    //       throw new AppError("Usuário já cadastrado", 409);
+    //     }
+    //     if (statusCode === 400) {
+    //       throw new AppError("Dados inválidos. Verifique os campos", 400);
+    //     }
+    //     if (statusCode === 500) {
+    //       throw new AppError(
+    //         "Erro no servidor. Tente novamente mais tarde",
+    //         500
+    //       );
+    //     }
+    //   }
+    // }
   }
 }

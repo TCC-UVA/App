@@ -30,5 +30,6 @@ api.interceptors.response.use(
     if (token && isUnauthorized) {
       useAuthStore.getState().reset();
     }
+    return Promise.reject(requestError);
   }
 );
