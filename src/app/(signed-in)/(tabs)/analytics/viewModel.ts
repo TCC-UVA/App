@@ -1,9 +1,9 @@
-import { Benchmark } from "@/src/models/benchmark";
+import { Benchmark, benchmarkToLabel } from "@/src/models/benchmark";
 import { useCompareTwoWalletsMutation } from "@/src/services/mutations";
 import { useCompareWalletWithBenchmarkMutation } from "@/src/services/mutations/wallet/useCompareWalletWithBenchmarkMutation";
 import { useGetWalletsQuery } from "@/src/services/queries";
 import { useState } from "react";
-import { AnalyticsViewModelProps, ComparisonMode } from "./model";
+import { AnalyticsViewModelProps } from "./model";
 
 export const useAnalyticsViewModel = ({
   walletService,
@@ -160,7 +160,7 @@ export const useAnalyticsViewModel = ({
       return "Comparar 2 Carteiras";
     }
     if (isBenchmarkComparison && selectedBenchmark) {
-      return `Comparar com ${selectedBenchmark}`;
+      return `Comparar com ${benchmarkToLabel[selectedBenchmark]}`;
     }
     return "Selecione itens para comparar";
   };

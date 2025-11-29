@@ -5,12 +5,20 @@ import { CompareTwoWalletsRequestDto } from "../dto/compare-two-wallets-request.
 import { CompareTwoWalletsResponseDto } from "../dto/compare-two-wallets-response.dto";
 import { CreateWalletRequestDto } from "../dto/create-request.dto";
 import { FindAllResponseDto } from "../dto/find-all-response.dto";
+import { GetAIInsightsBenchmarkRequestDto } from "../dto/get-ai-insights-benchmark-request.dto";
 import { GetAIInsightsRequestDto } from "../dto/get-ai-insights-request.dto";
 import { GetProfitsByWalletIdRequestDto } from "../dto/get-profits-by-wallet-id-request.dto";
 import { GetProfitsByWalletIdResponseDto } from "../dto/get-profits-by-wallet-id-response.dto";
 import { UpdateWalletRequestDto } from "../dto/update-request.dto";
 
 export class WalletServiceInMemory implements WalletService {
+  getAIInsightsBenchmark(
+    params: GetAIInsightsBenchmarkRequestDto
+  ): Promise<string> {
+    return Promise.resolve(
+      "These are the AI-generated benchmark insights for your wallet."
+    );
+  }
   comparePortfolioWithBenchmark(
     params: ComparePortfolioBenchmarkRequestDto
   ): Promise<ComparePortfolioBenchmarkResponseDto> {

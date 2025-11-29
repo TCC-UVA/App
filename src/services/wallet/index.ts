@@ -5,6 +5,7 @@ import { CompareTwoWalletsRequestDto } from "./dto/compare-two-wallets-request.d
 import { CompareTwoWalletsResponseDto } from "./dto/compare-two-wallets-response.dto";
 import { CreateWalletRequestDto } from "./dto/create-request.dto";
 import { FindAllResponseDto } from "./dto/find-all-response.dto";
+import { GetAIInsightsBenchmarkRequestDto } from "./dto/get-ai-insights-benchmark-request.dto";
 import { GetAIInsightsRequestDto } from "./dto/get-ai-insights-request.dto";
 import { GetProfitsByWalletIdRequestDto } from "./dto/get-profits-by-wallet-id-request.dto";
 import { GetProfitsByWalletIdResponseDto } from "./dto/get-profits-by-wallet-id-response.dto";
@@ -20,6 +21,9 @@ export interface WalletService {
     params: GetProfitsByWalletIdRequestDto
   ): Promise<GetProfitsByWalletIdResponseDto>;
   getAIInsights(params: GetAIInsightsRequestDto): Promise<string>;
+  getAIInsightsBenchmark(
+    params: GetAIInsightsBenchmarkRequestDto
+  ): Promise<string>;
   delete: (id: number) => Promise<void>;
   comparePortfolioWithBenchmark: (
     params: ComparePortfolioBenchmarkRequestDto
@@ -27,6 +31,17 @@ export interface WalletService {
 }
 
 export class WalletServiceHttp implements WalletService {
+  async getAIInsightsBenchmark(
+    params: GetAIInsightsBenchmarkRequestDto
+  ): Promise<string> {
+    const response = await api.post<string>(
+      `/gemini_compare_portfolio_benchmark`,
+      {
+        ...params,
+      }
+    );
+    return response.data;
+  }
   async comparePortfolioWithBenchmark(
     params: ComparePortfolioBenchmarkRequestDto
   ): Promise<ComparePortfolioBenchmarkResponseDto> {

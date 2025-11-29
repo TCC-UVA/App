@@ -62,7 +62,6 @@ export const useHomeViewModel = (service: WalletService) => {
 
     const params = JSON.stringify({
       ...walletProfitData,
-      walletName: selectedWallet.name,
       Assets: walletProfitData.Assets,
     });
 

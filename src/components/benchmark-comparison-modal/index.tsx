@@ -1,6 +1,7 @@
 import { benchmarkToLabel } from "@/src/models/benchmark";
 import { ComparePortfolioBenchmarkResponseDto } from "@/src/services/wallet/dto/compare-portfolio-benchmark-response.dto";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { Dimensions, ScrollView } from "react-native";
 import { BarChart } from "react-native-chart-kit";
 import {
@@ -15,12 +16,12 @@ import {
   XStack,
   YStack,
 } from "tamagui";
-import { useRouter } from "expo-router";
 
 interface BenchmarkComparisonModalProps {
   isOpen: boolean;
-  onClose: () => void;
   comparisonData?: ComparePortfolioBenchmarkResponseDto;
+  onClose: () => void;
+  handleAIAnalysis?: () => void;
 }
 
 export const BenchmarkComparisonModal = ({
@@ -34,17 +35,22 @@ export const BenchmarkComparisonModal = ({
   const handleAIAnalysis = () => {
     if (!comparisonData) return;
 
-    // Navigate to AI insights with benchmark comparison data
+    const params = JSON.stringify({
+      PortfolioId: comparisonData.PortfolioId,
+      Assets: comparisonData.Assets,
+      ConsolidatedProfitability: comparisonData.ConsolidatedProfitability,
+      InitialDate: comparisonData.InitialDate,
+      FinalDate: comparisonData.FinalDate,
+      walletName: `Comparação com ${comparisonData.Benchmark}`,
+      Benchmark: comparisonData.Benchmark,
+      BenchmarkValue: comparisonData.BenchmarkValue,
+      type: "benchmark",
+    });
+
     router.push({
       pathname: "/ai-insights",
       params: {
-        Assets: JSON.stringify(comparisonData.Assets),
-        ConsolidatedProfitability: comparisonData.ConsolidatedProfitability,
-        InitialDate: comparisonData.InitialDate,
-        FinalDate: comparisonData.FinalDate,
-        walletName: `Comparação com ${comparisonData.Benchmark}`,
-        benchmark: comparisonData.Benchmark,
-        benchmarkValue: comparisonData.BenchmarkValue,
+        params,
       },
     });
     onClose();
