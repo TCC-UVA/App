@@ -6,7 +6,7 @@ export const allocateQuantitiesSchema = Yup.object().shape({
       Yup.object().shape({
         symbol: Yup.string().required(),
         quantity: Yup.number()
-          .min(0, "Percentual deve ser maior ou igual a 0")
+          .min(1, "Percentual deve ser maior ou igual a 1")
           .max(100, "Percentual deve ser menor ou igual a 100")
           .required("Percentual é obrigatório"),
       })

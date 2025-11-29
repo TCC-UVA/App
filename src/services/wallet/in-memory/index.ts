@@ -1,4 +1,6 @@
 import { WalletService } from "..";
+import { ComparePortfolioBenchmarkRequestDto } from "../dto/compare-portfolio-benchmark-request.dto";
+import { ComparePortfolioBenchmarkResponseDto } from "../dto/compare-portfolio-benchmark-response.dto";
 import { CompareTwoWalletsRequestDto } from "../dto/compare-two-wallets-request.dto";
 import { CompareTwoWalletsResponseDto } from "../dto/compare-two-wallets-response.dto";
 import { CreateWalletRequestDto } from "../dto/create-request.dto";
@@ -9,6 +11,23 @@ import { GetProfitsByWalletIdResponseDto } from "../dto/get-profits-by-wallet-id
 import { UpdateWalletRequestDto } from "../dto/update-request.dto";
 
 export class WalletServiceInMemory implements WalletService {
+  comparePortfolioWithBenchmark(
+    params: ComparePortfolioBenchmarkRequestDto
+  ): Promise<ComparePortfolioBenchmarkResponseDto> {
+    return Promise.resolve({
+      Assets: {
+        "MOVI3.SA": "-66.42%",
+        "RENT3.SA": "-10.25%",
+        "RAPT4.SA": "5.67%",
+      },
+      PortfolioId: Number(params.walletId),
+      Benchmark: params.benchmark,
+      FinalDate: params.finalYear,
+      InitialDate: params.initialYear,
+      BenchmarkValue: "15.30%",
+      ConsolidatedProfitability: "-12.34%",
+    });
+  }
   async compareTwoWallets(
     params: CompareTwoWalletsRequestDto
   ): Promise<CompareTwoWalletsResponseDto> {

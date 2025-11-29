@@ -1,4 +1,6 @@
 import { api } from "../api";
+import { ComparePortfolioBenchmarkRequestDto } from "./dto/compare-portfolio-benchmark-request.dto";
+import { ComparePortfolioBenchmarkResponseDto } from "./dto/compare-portfolio-benchmark-response.dto";
 import { CompareTwoWalletsRequestDto } from "./dto/compare-two-wallets-request.dto";
 import { CompareTwoWalletsResponseDto } from "./dto/compare-two-wallets-response.dto";
 import { CreateWalletRequestDto } from "./dto/create-request.dto";
@@ -19,9 +21,20 @@ export interface WalletService {
   ): Promise<GetProfitsByWalletIdResponseDto>;
   getAIInsights(params: GetAIInsightsRequestDto): Promise<string>;
   delete: (id: number) => Promise<void>;
+  comparePortfolioWithBenchmark: (
+    params: ComparePortfolioBenchmarkRequestDto
+  ) => Promise<ComparePortfolioBenchmarkResponseDto>;
 }
 
 export class WalletServiceHttp implements WalletService {
+  async comparePortfolioWithBenchmark(
+    params: ComparePortfolioBenchmarkRequestDto
+  ): Promise<ComparePortfolioBenchmarkResponseDto> {
+    const response = await api.get<ComparePortfolioBenchmarkResponseDto>(
+      `/compare_portfolio_with_benchmark/${params.walletId}/${params.benchmark}/${params.initialYear}/${params.finalYear}`
+    );
+    return response.data;
+  }
   async create(params: CreateWalletRequestDto): Promise<string> {
     const response = await api.post("/portfolio", {
       Name: params.name,

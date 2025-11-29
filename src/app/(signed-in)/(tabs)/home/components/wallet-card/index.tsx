@@ -80,6 +80,7 @@ export const WalletCard = ({
             Editar
           </Button>
           <Button
+            flex={1}
             testID="details-wallet-btn"
             size="$3"
             bg="$blue10"

@@ -231,12 +231,19 @@ export const WalletDetailsModal = ({
               {isLoadingMetrics ? "Carregando..." : "Obter Métricas"}
             </Button>
             <Button
-              bg="$purple10"
-              color="white"
+              variant="outlined"
+              borderColor="$blue10"
+              color="$blue10"
               onPress={handleAIInsights}
               disabled={!initialYear || !finalYear}
               opacity={!initialYear || !finalYear ? 0.5 : 1}
-              icon={<Ionicons name="sparkles" size={18} color="white" />}
+              icon={
+                <Ionicons
+                  name="sparkles"
+                  size={18}
+                  color={String(theme.blue10?.val)}
+                />
+              }
             >
               Análise com IA
             </Button>

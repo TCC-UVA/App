@@ -8,18 +8,8 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import Animated, {
-  FadeInDown,
-  FadeInUp,
-} from "react-native-reanimated";
-import {
-  Button,
-  H6,
-  Paragraph,
-  XStack,
-  YStack,
-  useTheme,
-} from "tamagui";
+import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
+import { Button, H6, Paragraph, XStack, YStack, useTheme } from "tamagui";
 import { QuantityInput } from "./components/QuantityInput";
 import { useAllocateQuantitiesViewModel } from "./viewModel";
 
@@ -98,7 +88,11 @@ export const AllocateQuantitiesView = ({
                 isValid ? "$green6" : isOverLimit ? "$red6" : "$blue6"
               }
             >
-              <XStack justifyContent="space-between" alignItems="center" mb="$2">
+              <XStack
+                justifyContent="space-between"
+                alignItems="center"
+                mb="$2"
+              >
                 <Paragraph fontSize={13} color="$gray11">
                   Total alocado
                 </Paragraph>
@@ -114,12 +108,7 @@ export const AllocateQuantitiesView = ({
               </XStack>
               {/* Progress bar */}
               <YStack gap="$1">
-                <XStack
-                  h={8}
-                  bg="$gray5"
-                  borderRadius="$2"
-                  overflow="hidden"
-                >
+                <XStack h={8} bg="$gray5" borderRadius="$2" overflow="hidden">
                   <YStack
                     w={`${Math.min(totalPercentage, 100)}%`}
                     h="100%"
