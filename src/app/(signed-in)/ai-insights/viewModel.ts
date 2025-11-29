@@ -10,15 +10,11 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 export const useAIInsightsViewModel = (service: WalletService) => {
   const router = useRouter();
   const params = useLocalSearchParams<{
-    walletName: string;
     params: string;
-    type: string;
   }>();
 
   const sanitizedParams = JSON.parse(params.params);
   const isBenchmark = sanitizedParams.type === "benchmark";
-
-  console.log("params", params);
 
   const queryByType = isBenchmark
     ? useGetWalletAIInsightBenchmarkQuery
@@ -60,7 +56,7 @@ export const useAIInsightsViewModel = (service: WalletService) => {
     insights,
     isLoading,
     error: isError,
-    walletName: params.walletName,
+    walletName: sanitizedParams.walletName,
     handleGoBack,
   };
 };

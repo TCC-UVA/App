@@ -63,13 +63,13 @@ export const useHomeViewModel = (service: WalletService) => {
     const params = JSON.stringify({
       ...walletProfitData,
       Assets: walletProfitData.Assets,
+      walletName: selectedWallet.name,
     });
 
     handleCloseDetails();
     router.push({
       pathname: "/(signed-in)/ai-insights",
       params: {
-        walletName: selectedWallet.name,
         params,
       },
     });

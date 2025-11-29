@@ -275,7 +275,6 @@ describe("Home - ViewModel", () => {
     expect(useRouter().push).toHaveBeenCalledWith({
       pathname: "/(signed-in)/ai-insights",
       params: {
-        walletName: wallet.name,
         params: expectedParams,
       },
     });

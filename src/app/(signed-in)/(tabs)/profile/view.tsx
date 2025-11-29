@@ -15,28 +15,33 @@ export const ProfileView = ({
   return (
     <Layout>
       <Header>
-        <TouchableOpacity onPress={handleToggleSignOutSheet}>
+        <TouchableOpacity
+          testID="logout-button"
+          onPress={handleToggleSignOutSheet}
+        >
           <Ionicons size={24} name="log-out-outline" color={theme.red10.val} />
         </TouchableOpacity>
       </Header>
 
-      <ConfirmActionSheet
-        isOpen={signOutSheetOpen}
-        onClose={handleToggleSignOutSheet}
-        title="Deseja realmente sair da sua conta?"
-      >
-        <Button bg="$blue10" color="white" onPress={handleSignout}>
-          Sair
-        </Button>
-        <Button
-          variant="outlined"
-          borderColor="$gray8"
-          color="$gray12"
-          onPress={handleToggleSignOutSheet}
+      {signOutSheetOpen && (
+        <ConfirmActionSheet
+          isOpen={signOutSheetOpen}
+          onClose={handleToggleSignOutSheet}
+          title="Deseja realmente sair da sua conta?"
         >
-          Cancelar
-        </Button>
-      </ConfirmActionSheet>
+          <Button bg="$blue10" color="white" onPress={handleSignout}>
+            Sair
+          </Button>
+          <Button
+            variant="outlined"
+            borderColor="$gray8"
+            color="$gray12"
+            onPress={handleToggleSignOutSheet}
+          >
+            Cancelar
+          </Button>
+        </ConfirmActionSheet>
+      )}
     </Layout>
   );
 };

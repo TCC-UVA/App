@@ -36,6 +36,29 @@ jest.mock("react-native/Libraries/Lists/FlatList", () => {
 });
 
 jest.mock(
+  "react-native/Libraries/Components/Touchable/TouchableOpacity",
+  () => {
+    const React = require("react");
+    const { View } = require("react-native");
+
+    return {
+      __esModule: true,
+      default: jest.fn(({ children, onPress, ...props }: any) =>
+        React.createElement(
+          View,
+          {
+            ...props,
+            onStartShouldSetResponder: () => true,
+            onResponderRelease: onPress,
+          },
+          children
+        )
+      ),
+    };
+  }
+);
+
+jest.mock(
   "react-native/Libraries/Components/Keyboard/KeyboardAvoidingView",
   () => {
     const React = require("react");
