@@ -7,6 +7,7 @@ import { CreateWalletRequestDto } from "./dto/create-request.dto";
 import { FindAllResponseDto } from "./dto/find-all-response.dto";
 import { GetAIInsightsBenchmarkRequestDto } from "./dto/get-ai-insights-benchmark-request.dto";
 import { GetAIInsightsRequestDto } from "./dto/get-ai-insights-request.dto";
+import { GetDividendsYieldByWalletIdResponseDto } from "./dto/get-dividends-yield-by-wallet-id-response.dto";
 import { GetProfitsByWalletIdRequestDto } from "./dto/get-profits-by-wallet-id-request.dto";
 import { GetProfitsByWalletIdResponseDto } from "./dto/get-profits-by-wallet-id-response.dto";
 import { UpdateWalletRequestDto } from "./dto/update-request.dto";
@@ -17,6 +18,9 @@ export interface WalletService {
   compareTwoWallets: (
     params: CompareTwoWalletsRequestDto
   ) => Promise<CompareTwoWalletsResponseDto>;
+  getDividendsByWalletId: (
+    params: GetProfitsByWalletIdRequestDto
+  ) => Promise<GetDividendsYieldByWalletIdResponseDto>;
   getProfitsByWalletId(
     params: GetProfitsByWalletIdRequestDto
   ): Promise<GetProfitsByWalletIdResponseDto>;
@@ -31,6 +35,21 @@ export interface WalletService {
 }
 
 export class WalletServiceHttp implements WalletService {
+  async getDividendsByWalletId(
+    params: GetProfitsByWalletIdRequestDto
+  ): Promise<GetDividendsYieldByWalletIdResponseDto> {
+    const response = await api.get<GetDividendsYieldByWalletIdResponseDto>(
+      `/portfolio_dividend_yield`,
+      {
+        params: {
+          portfolio_id: params.walletId,
+          initial_year: params.initial_year,
+          final_year: params.final_year,
+        },
+      }
+    );
+    return response.data;
+  }
   async getAIInsightsBenchmark(
     params: GetAIInsightsBenchmarkRequestDto
   ): Promise<string> {

@@ -1,9 +1,13 @@
 import { Wallet } from "@/src/models";
-import { useGetWalletProfitMutation } from "@/src/services/mutations";
+import {
+  useGetWalletDividendYieldMutation,
+  useGetWalletProfitMutation,
+} from "@/src/services/mutations";
 import { useGetWalletsQuery } from "@/src/services/queries";
 import { WalletService } from "@/src/services/wallet";
 import { useRouter } from "expo-router";
 import { useState } from "react";
+import { MetricType } from "./components/wallet-details-modal";
 
 export const useHomeViewModel = (service: WalletService) => {
   const router = useRouter();
@@ -18,6 +22,14 @@ export const useHomeViewModel = (service: WalletService) => {
     mutate: onGetWalletProfit,
     isPending: isLoadingWalletProfit,
   } = useGetWalletProfitMutation(service);
+  const {
+    data: walletDividendYieldData,
+    mutate: onGetWalletDividendYield,
+    isPending: isLoadingWalletDividendYield,
+  } = useGetWalletDividendYieldMutation(service);
+
+  const [currentMetricType, setCurrentMetricType] =
+    useState<MetricType>("profitability");
 
   const handleGoToCreateWallet = () => {
     router.navigate("/(signed-in)/(create-portfolio)/create");
@@ -34,7 +46,12 @@ export const useHomeViewModel = (service: WalletService) => {
     setSelectedWallet(wallet);
     const currentYear = new Date().getFullYear().toString();
     const lastYear = (new Date().getFullYear() - 1).toString();
-    handleGetMetrics(wallet.PortfolioId, lastYear, currentYear);
+    handleGetMetrics(
+      wallet.PortfolioId,
+      lastYear,
+      currentYear,
+      "profitability"
+    );
     setIsDetailsModalOpen(true);
   };
 
@@ -46,23 +63,33 @@ export const useHomeViewModel = (service: WalletService) => {
   const handleGetMetrics = (
     portfolioId: number,
     initialYear: string,
-    finalYear: string
+    finalYear: string,
+    metricType: MetricType
   ) => {
-    onGetWalletProfit({
+    setCurrentMetricType(metricType);
+    const params = {
       walletId: portfolioId,
       initial_year: initialYear,
       final_year: finalYear,
-    });
+    };
+
+    if (metricType === "profitability") {
+      onGetWalletProfit(params);
+    } else {
+      onGetWalletDividendYield(params);
+    }
   };
 
   const handleGetAIInsights = () => {
-    if (!walletProfitData || !selectedWallet) {
+    const currentData = walletProfitData;
+
+    if (!currentData || !selectedWallet) {
       return;
     }
 
     const params = JSON.stringify({
-      ...walletProfitData,
-      Assets: walletProfitData.Assets,
+      ...currentData,
+      Assets: currentData.Assets,
       walletName: selectedWallet.name,
     });
 
@@ -86,6 +113,16 @@ export const useHomeViewModel = (service: WalletService) => {
   const handleChangeDraftSearch = (text: string) => {
     setDraftSearch(text);
   };
+  const currentMetricsData =
+    currentMetricType === "profitability"
+      ? walletProfitData
+      : walletDividendYieldData;
+
+  const isLoadingMetrics =
+    currentMetricType === "profitability"
+      ? isLoadingWalletProfit
+      : isLoadingWalletDividendYield;
+
   return {
     draftSearch,
     wallets: filteredWallets,
@@ -100,7 +137,9 @@ export const useHomeViewModel = (service: WalletService) => {
     handleCloseDetails,
     handleGetMetrics,
     handleGetAIInsights,
-    walletProfitData,
-    isLoadingWalletProfit,
+    metricsData: currentMetricsData,
+    isLoadingMetrics,
+    currentMetricType,
+    setCurrentMetricType,
   };
 };

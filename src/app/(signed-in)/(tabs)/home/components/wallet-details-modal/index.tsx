@@ -1,5 +1,6 @@
 import { SkeletonBox } from "@/src/components/base/skeleton";
 import { Wallet } from "@/src/models";
+import { GetDividendsYieldByWalletIdResponseDto } from "@/src/services/wallet/dto/get-dividends-yield-by-wallet-id-response.dto";
 import { GetProfitsByWalletIdResponseDto } from "@/src/services/wallet/dto/get-profits-by-wallet-id-response.dto";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
@@ -12,10 +13,13 @@ import {
   Separator,
   Sheet,
   Spinner,
+  ToggleGroup,
   XStack,
   YStack,
   useTheme,
 } from "tamagui";
+
+export type MetricType = "profitability" | "dividendYield";
 
 type WalletDetailsModalProps = {
   wallet: Wallet | null;
@@ -24,11 +28,17 @@ type WalletDetailsModalProps = {
   onGetMetrics: (
     portfolioId: number,
     initialYear: string,
-    finalYear: string
+    finalYear: string,
+    metricType: MetricType
   ) => void;
   onGetAIInsights: () => void;
-  metricsData?: GetProfitsByWalletIdResponseDto | null;
+  metricsData?:
+    | GetDividendsYieldByWalletIdResponseDto
+    | GetProfitsByWalletIdResponseDto
+    | undefined;
   isLoadingMetrics?: boolean;
+  currentMetricType: MetricType;
+  setMetricType: (type: MetricType) => void;
 };
 
 export const WalletDetailsModal = ({
@@ -39,6 +49,8 @@ export const WalletDetailsModal = ({
   onGetAIInsights,
   metricsData,
   isLoadingMetrics = false,
+  currentMetricType,
+  setMetricType,
 }: WalletDetailsModalProps) => {
   const theme = useTheme();
   const currentYear = new Date().getFullYear().toString();
@@ -51,7 +63,7 @@ export const WalletDetailsModal = ({
   if (!wallet) return null;
 
   const handleGetMetrics = () => {
-    onGetMetrics(wallet.PortfolioId, initialYear, finalYear);
+    onGetMetrics(wallet.PortfolioId, initialYear, finalYear, currentMetricType);
   };
 
   const handleAIInsights = () => {
@@ -59,6 +71,24 @@ export const WalletDetailsModal = ({
       return setShowAIAlert(true);
     }
     onGetAIInsights();
+  };
+
+  const isProfit = currentMetricType === "profitability";
+
+  const metricData = (name: string) => {
+    if (isProfit) {
+      return (
+        Object.entries(metricsData?.Assets || {}).map(([key, profit]) =>
+          key === name ? profit : null
+        ) || "--"
+      );
+    }
+
+    return (
+      Object.entries(metricsData || {}).map(([key, yieldValue]) =>
+        key === name ? yieldValue : null
+      ) || "--"
+    );
   };
 
   return (
@@ -112,22 +142,100 @@ export const WalletDetailsModal = ({
             </YStack>
             <Separator />
 
-            <YStack gap="$2">
+            <YStack gap="$3">
               <Paragraph fontSize={14} color="$gray11" fontWeight="600">
-                Rentabilidade Total da Carteira
+                Tipo de Métrica
               </Paragraph>
-              {isLoadingMetrics ? (
-                <SkeletonBox width={100} height={24} />
-              ) : metricsData?.ConsolidatedProfitability ? (
-                <Paragraph fontSize={18} color="$blue10" fontWeight="700">
-                  {metricsData.ConsolidatedProfitability}
-                </Paragraph>
-              ) : (
-                <Paragraph fontSize={16} color="$gray10">
-                  -
-                </Paragraph>
-              )}
+              <ToggleGroup
+                orientation="horizontal"
+                type="single"
+                value={currentMetricType}
+                onValueChange={(value) => {
+                  if (value) setMetricType(value as MetricType);
+                }}
+                disableDeactivation
+              >
+                <ToggleGroup.Item
+                  value="profitability"
+                  flex={1}
+                  bg={
+                    currentMetricType === "profitability" ? "$blue10" : "$gray3"
+                  }
+                  borderColor={
+                    currentMetricType === "profitability" ? "$blue10" : "$gray6"
+                  }
+                  borderWidth={1}
+                  pressStyle={{
+                    bg:
+                      currentMetricType === "profitability"
+                        ? "$blue9"
+                        : "$gray4",
+                  }}
+                >
+                  <Paragraph
+                    fontSize={14}
+                    fontWeight="600"
+                    color={
+                      currentMetricType === "profitability"
+                        ? "white"
+                        : "$gray11"
+                    }
+                  >
+                    Rentabilidade
+                  </Paragraph>
+                </ToggleGroup.Item>
+                <ToggleGroup.Item
+                  value="dividendYield"
+                  flex={1}
+                  bg={
+                    currentMetricType === "dividendYield" ? "$blue10" : "$gray3"
+                  }
+                  borderColor={
+                    currentMetricType === "dividendYield" ? "$blue10" : "$gray6"
+                  }
+                  borderWidth={1}
+                  pressStyle={{
+                    bg:
+                      currentMetricType === "dividendYield"
+                        ? "$blue9"
+                        : "$gray4",
+                  }}
+                >
+                  <Paragraph
+                    fontSize={14}
+                    fontWeight="600"
+                    color={
+                      currentMetricType === "dividendYield"
+                        ? "white"
+                        : "$gray11"
+                    }
+                  >
+                    Dividend Yield
+                  </Paragraph>
+                </ToggleGroup.Item>
+              </ToggleGroup>
             </YStack>
+
+            <Separator />
+
+            {isProfit ? (
+              <YStack gap="$2">
+                <Paragraph fontSize={14} color="$gray11" fontWeight="600">
+                  Rentabilidade Total da Carteira
+                </Paragraph>
+                {isLoadingMetrics ? (
+                  <SkeletonBox width={100} height={24} />
+                ) : metricsData?.ConsolidatedProfitability ? (
+                  <Paragraph fontSize={18} color="$blue10" fontWeight="700">
+                    {metricsData.ConsolidatedProfitability}
+                  </Paragraph>
+                ) : (
+                  <Paragraph fontSize={16} color="$gray10">
+                    -
+                  </Paragraph>
+                )}
+              </YStack>
+            ) : null}
 
             {wallet.Assets.length > 0 && (
               <>
@@ -161,10 +269,7 @@ export const WalletDetailsModal = ({
                           color="$blue10"
                           fontWeight="600"
                         >
-                          {Object.entries(metricsData?.Assets || {}).map(
-                            ([key, profit]) =>
-                              key === asset.name ? profit : null
-                          ) || "--"}
+                          {metricData(asset.name)}
                         </Paragraph>
                       )}
                     </XStack>
@@ -230,23 +335,25 @@ export const WalletDetailsModal = ({
             >
               {isLoadingMetrics ? "Carregando..." : "Obter Métricas"}
             </Button>
-            <Button
-              variant="outlined"
-              borderColor="$blue10"
-              color="$blue10"
-              onPress={handleAIInsights}
-              disabled={!initialYear || !finalYear}
-              opacity={!initialYear || !finalYear ? 0.5 : 1}
-              icon={
-                <Ionicons
-                  name="sparkles"
-                  size={18}
-                  color={String(theme.blue10?.val)}
-                />
-              }
-            >
-              Análise com IA
-            </Button>
+            {isProfit && (
+              <Button
+                variant="outlined"
+                borderColor="$blue10"
+                color="$blue10"
+                onPress={handleAIInsights}
+                disabled={!initialYear || !finalYear}
+                opacity={!initialYear || !finalYear ? 0.5 : 1}
+                icon={
+                  <Ionicons
+                    name="sparkles"
+                    size={18}
+                    color={String(theme.blue10?.val)}
+                  />
+                }
+              >
+                Análise com IA
+              </Button>
+            )}
           </YStack>
         </YStack>
 

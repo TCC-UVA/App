@@ -24,8 +24,10 @@ export const HomeView = ({
   handleCloseDetails,
   handleGetMetrics,
   handleGetAIInsights,
-  isLoadingWalletProfit,
-  walletProfitData,
+  isLoadingMetrics,
+  metricsData,
+  currentMetricType,
+  setCurrentMetricType,
 }: ReturnType<typeof useHomeViewModel>) => {
   const theme = useTheme();
 
@@ -135,8 +137,10 @@ export const HomeView = ({
         onClose={handleCloseDetails}
         onGetMetrics={handleGetMetrics}
         onGetAIInsights={handleGetAIInsights}
-        metricsData={walletProfitData}
-        isLoadingMetrics={isLoadingWalletProfit}
+        metricsData={metricsData}
+        isLoadingMetrics={isLoadingMetrics}
+        currentMetricType={currentMetricType}
+        setMetricType={setCurrentMetricType}
       />
     </Layout>
   );

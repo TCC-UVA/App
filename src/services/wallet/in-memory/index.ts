@@ -7,11 +7,21 @@ import { CreateWalletRequestDto } from "../dto/create-request.dto";
 import { FindAllResponseDto } from "../dto/find-all-response.dto";
 import { GetAIInsightsBenchmarkRequestDto } from "../dto/get-ai-insights-benchmark-request.dto";
 import { GetAIInsightsRequestDto } from "../dto/get-ai-insights-request.dto";
+import { GetDividendsYieldByWalletIdResponseDto } from "../dto/get-dividends-yield-by-wallet-id-response.dto";
 import { GetProfitsByWalletIdRequestDto } from "../dto/get-profits-by-wallet-id-request.dto";
 import { GetProfitsByWalletIdResponseDto } from "../dto/get-profits-by-wallet-id-response.dto";
 import { UpdateWalletRequestDto } from "../dto/update-request.dto";
 
 export class WalletServiceInMemory implements WalletService {
+  getDividendsByWalletId(
+    params: GetProfitsByWalletIdRequestDto
+  ): Promise<GetDividendsYieldByWalletIdResponseDto> {
+    return Promise.resolve({
+      "EFGH4.SA": "12.34%",
+      "IJKL4.SA": "7.89%",
+      "MNOP3.SA": "4.56%",
+    } as GetDividendsYieldByWalletIdResponseDto);
+  }
   getAIInsightsBenchmark(
     params: GetAIInsightsBenchmarkRequestDto
   ): Promise<string> {
